@@ -23,9 +23,24 @@ class Game:
     MAXIMUM_SENTENCE = 3
     RESULT_MATRIX = [[(MEDIUM_SENTENCE, MEDIUM_SENTENCE), (MAXIMUM_SENTENCE, LET_GO)],
                      [(LET_GO, MAXIMUM_SENTENCE), (MINIMUM_SENTENCE, MINIMUM_SENTENCE)]]
+    game_history = []
+    player_moves = {}
     
-    def playGame(self, choice1, choice2):
-        print(self.RESULT_MATRIX[choice2][choice1])
+    def __init__(self, player1, player2):
+        self.player1 = player1
+        self.player2 = player2
+        self.player_moves = dict(player1 = [], player2 = [])
+    
+    def playGame(self):
+        player1_move = self.player1.chooseMove()
+        player2_move = self.player2.chooseMove()
+
+        result = self.RESULT_MATRIX[player1_move][player2_move]
+
+        self.player_moves["player1"].append(player1_move)
+        self.player_moves["player2"].append(player2_move)
+        self.game_history.append(result)
+        print(result)
     
 """
 game = Game()
