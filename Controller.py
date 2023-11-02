@@ -1,20 +1,19 @@
 from Game import *
 from Player import *
-
-def alwaysDefect():
-    return 1
-
-def alwaysCooperate():
-    return 0
+from Strategies import *
 
 
-#expected return: (0, 3)
-player1 = Player(alwaysDefect)
-player2 = Player(alwaysCooperate)
-game = Game(player1, player2)
+strategy1 = AlwaysDefect()
+strategy2 = AlwaysCooperate()
+strategy3 = TitForTat()
+strategy4 = RandomChoice()
 
-for i in range(10):
+game = Game(strategy4, strategy3)
+
+for i in range(100):
     game.playGame()
 
-print(game.player_moves)
-print(game.game_history)
+
+print(game.addServedTime())
+#print(game.player_moves)
+#print(game.game_history)

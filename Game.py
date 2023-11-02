@@ -26,22 +26,29 @@ class Game:
     game_history = []
     player_moves = {}
     
-    def __init__(self, player1, player2):
-        self.player1 = player1
-        self.player2 = player2
-        self.player_moves = dict(player1 = [], player2 = [])
+    def __init__(self, strategy1, strategy2):
+        self.strategy1 = strategy1
+        self.strategy2 = strategy2
+        self.player_moves = dict(strategy1 = [], strategy2 = [])
     
     def playGame(self):
-        player1_move = self.player1.chooseMove()
-        player2_move = self.player2.chooseMove()
+        strategy1_move = self.strategy1.chooseMove(self.player_moves["strategy2"])
+        strategy2_move = self.strategy2.chooseMove(self.player_moves["strategy1"])
 
-        result = self.RESULT_MATRIX[player1_move][player2_move]
+        result = self.RESULT_MATRIX[strategy1_move][strategy2_move]
 
-        self.player_moves["player1"].append(player1_move)
-        self.player_moves["player2"].append(player2_move)
+        self.player_moves["strategy1"].append(strategy1_move)
+        self.player_moves["strategy2"].append(strategy2_move)
         self.game_history.append(result)
-        print(result)
+        #print(result)
     
+    def addServedTime(self):
+        result = [0,0]
+        for outcome in self.game_history:
+            result[0] += outcome[0]
+            result[1] += outcome[1]
+        return result
+
 """
 game = Game()
 game.playGame(0,0)

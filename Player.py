@@ -1,6 +1,7 @@
 """
 Player class, takes a strategy function which helps
 it decide what move to go for next
+PROBABLY WILL NOT BE USED ANYMORE BUT WILL BE KEPT HERE JUST IN CASE FOR NOW
 """
 class Player:
 
