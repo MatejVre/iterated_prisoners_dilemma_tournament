@@ -1,19 +1,24 @@
 from Game import *
 from Player import *
 from Strategies import *
+from Tournament import *
 
 
-strategy1 = AlwaysDefect()
-strategy2 = AlwaysCooperate()
-strategy3 = TitForTat()
-strategy4 = RandomChoice()
+s1 = AlwaysDefect()
+s2 = AlwaysCooperate()
+s3 = TitForTat()
+s4 = RandomChoice()
 
-game = Game(strategy4, strategy3)
+listOfStrategies = [s1, s2, s3, s4]
+game = Game()
+tournament = Tournament(game, listOfStrategies)
 
-for i in range(100):
-    game.playGame()
+tournament.play_basic_tournament()
 
 
-print(game.addServedTime())
+#print(game.addServedTime())
 #print(game.player_moves)
+#game.clear_player_moves()
+#print(game.player_moves)
+
 #print(game.game_history)

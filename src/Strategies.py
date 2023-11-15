@@ -11,10 +11,18 @@ class AlwaysDefect:
         return 1
     
 
+    def name(self):
+        return self.__class__.__name__
+    
+
 class AlwaysCooperate:
 
     def chooseMove(self, opponentPastMove):
         return 0
+    
+    def name(self):
+        return self.__class__.__name__
+    
     
 class TitForTat:
 
@@ -24,9 +32,18 @@ class TitForTat:
         else:
             return opponentPastMove[-1]
         
+    
+    def name(self):
+        return self.__class__.__name__
+    
+        
 class RandomChoice:
 
     def chooseMove(self, opponentPastMove):
         return random.randint(0,1)
+    
+
+    def name(self):
+        return self.__class__.__name__
     
 

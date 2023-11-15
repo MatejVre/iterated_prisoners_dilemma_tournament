@@ -25,11 +25,15 @@ class Game:
                      [(LET_GO, MAXIMUM_SENTENCE), (MINIMUM_SENTENCE, MINIMUM_SENTENCE)]]
     game_history = []
     player_moves = {}
-    
-    def __init__(self, strategy1, strategy2):
-        self.strategy1 = strategy1
-        self.strategy2 = strategy2
+    strategy1 = None
+    strategy2 = None
+
+
+    def __init__(self):
+        #self.strategy1 = strategy1
+        #self.strategy2 = strategy2
         self.player_moves = dict(strategy1 = [], strategy2 = [])
+
     
     def playGame(self):
         strategy1_move = self.strategy1.chooseMove(self.player_moves["strategy2"])
@@ -42,12 +46,23 @@ class Game:
         self.game_history.append(result)
         #print(result)
     
+    #gets total served time of both of the strategy
+    #returns [time_for_strategy1, time_for_strategy2]
     def addServedTime(self):
         result = [0,0]
         for outcome in self.game_history:
             result[0] += outcome[0]
             result[1] += outcome[1]
         return result
+    
+    #clears the game history
+    def clear_game_history(self):
+        self.game_history = []
+
+    #clears both players histories
+    def clear_player_moves(self):
+        self.player_moves["strategy1"] = []
+        self.player_moves["strategy2"] = []
 
 """
 game = Game()
