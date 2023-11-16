@@ -5,45 +5,106 @@ Will see if i can add functions that retain state over multiple calls.
 """
 import random
 
-class AlwaysDefect:
+#Tested
+class Strategy():
 
-    def chooseMove(self, opponentPastMove):
-        return 1
-    
-
+    def __init__(self, **kwargs):
+        if len(kwargs) != 0:
+            self.chance_of_inverse = kwargs["chance_of_inverse"]
+        else:
+            self.chance_of_inverse = 0
+        
     def name(self):
         return self.__class__.__name__
     
 
-class AlwaysCooperate:
-
-    def chooseMove(self, opponentPastMove):
+    def invert_choice(self, choice):
+        if choice == 0:
+            return 1
         return 0
     
-    def name(self):
-        return self.__class__.__name__
+
+    def process_choice(self, choice):
+        random_number = random.randint(0,99)
+        if random_number < self.chance_of_inverse:
+            return self.invert_choice(choice)
+        return choice
     
+
+    def reset(self):
+        pass
+
+#Tested
+class AlwaysDefect(Strategy):
+
+    def chooseMove(self, opponentPastMove):
+        return self.process_choice(1)
     
-class TitForTat:
+#Tested
+class AlwaysCooperate(Strategy):
+
+    def chooseMove(self, opponentPastMove):
+        return self.process_choice(0)
+    
+#Tested
+class TitForTat(Strategy):
 
     def chooseMove(self, opponentPastMove):
         if len(opponentPastMove) == 0:
-            return 0
+            return self.process_choice(0)
         else:
-            return opponentPastMove[-1]
+            return self.process_choice(opponentPastMove[-1])
         
-    
-    def name(self):
-        return self.__class__.__name__
-    
-        
-class RandomChoice:
+#Cannot test     
+class RandomChoice(Strategy):
 
     def chooseMove(self, opponentPastMove):
         return random.randint(0,1)
+
+   
+#If the players did different things on the previous move,
+#this rule cooperates with probability 2/7. Otherwise this rule always cooperates
+#Tested
+class Grofman(Strategy):
+
+    own_past_move = None
+
+    def chooseMove(self, opponentPastMove):
+        if self.own_past_move == None:
+            choice = self.process_choice(0)
+        elif opponentPastMove[-1] == self.own_past_move:
+            choice = self.process_choice(0)
+        else:
+            number = random.randint(0,9999)
+            if number < 2857:
+                choice = self.process_choice(0)
+            else:
+                choice = self.process_choice(1)
+        self.own_past_move = choice
+        return choice
     
 
-    def name(self):
-        return self.__class__.__name__
-    
+    def reset(self):
+        self.own_past_move = None
+
+
+#Not tested completely
+class Shubik(Strategy):
+
+    num_of_opp_defects = 0
+    upcoming_defects = 0
+
+    def chooseMove(self, opponentPastMove):
+        if len(opponentPastMove) == 0:
+            return self.process_choice(0)
+        
+        if opponentPastMove[-1] == 1:
+            self.num_of_opp_defects += 1
+            self.upcoming_defects += self.num_of_opp_defects
+        
+        if self.upcoming_defects != 0:
+            self.upcoming_defects -= 1
+            return self.process_choice(1)
+        
+        return self.process_choice(0)
 

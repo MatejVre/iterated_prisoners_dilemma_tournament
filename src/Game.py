@@ -17,12 +17,12 @@ Result matrix based off of:
 """
 
 class Game:
-    LET_GO = 0
-    MINIMUM_SENTENCE = 1
-    MEDIUM_SENTENCE = 2
-    MAXIMUM_SENTENCE = 3
-    RESULT_MATRIX = [[(MEDIUM_SENTENCE, MEDIUM_SENTENCE), (MAXIMUM_SENTENCE, LET_GO)],
-                     [(LET_GO, MAXIMUM_SENTENCE), (MINIMUM_SENTENCE, MINIMUM_SENTENCE)]]
+    ZERO = 0
+    MINIMUM_PAYOFF = 1
+    MEDIUM_PAYOFF = 3
+    MAXIMUM_PAYOFF = 5
+    RESULT_MATRIX = [[(MEDIUM_PAYOFF, MEDIUM_PAYOFF), (MAXIMUM_PAYOFF, ZERO)],
+                     [(ZERO, MAXIMUM_PAYOFF), (MINIMUM_PAYOFF, MINIMUM_PAYOFF)]]
     game_history = []
     player_moves = {}
     strategy1 = None
@@ -39,7 +39,7 @@ class Game:
         strategy1_move = self.strategy1.chooseMove(self.player_moves["strategy2"])
         strategy2_move = self.strategy2.chooseMove(self.player_moves["strategy1"])
 
-        result = self.RESULT_MATRIX[strategy1_move][strategy2_move]
+        result = self.RESULT_MATRIX[strategy2_move][strategy1_move]
 
         self.player_moves["strategy1"].append(strategy1_move)
         self.player_moves["strategy2"].append(strategy2_move)
