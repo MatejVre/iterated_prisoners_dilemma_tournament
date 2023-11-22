@@ -108,3 +108,8 @@ class Shubik(Strategy):
         
         return self.process_choice(0)
 
+    
+    def reset(self):
+        self.num_of_opp_defects = 0
+        self.upcoming_defects = 0
+
