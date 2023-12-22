@@ -48,7 +48,7 @@ class Game:
     
     #gets total served time of both of the strategy
     #returns [time_for_strategy1, time_for_strategy2]
-    def addServedTime(self):
+    def add_payoffs(self):
         result = [0,0]
         for outcome in self.game_history:
             result[0] += outcome[0]

@@ -1,5 +1,6 @@
 import pytest
 import random
+from src import *
 from src.Strategies import *
 from src.Game import Game
 #from src.Tournament import Tournament
