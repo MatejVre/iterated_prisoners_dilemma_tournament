@@ -7,6 +7,7 @@ import numpy as np
 
 #This is the constant that represents the chance of failure
 #It is expressed in %
+terminated = False
 COI = 5
 
 s1 = AlwaysDefect()
@@ -16,18 +17,27 @@ s4 = RandomChoice()
 s5 = Grofman()
 s6 = Shubik()
 
-s7 = AlwaysDefect(chance_of_inverse=COI)
-s8 = AlwaysCooperate(chance_of_inverse=COI)
-s9 = TitForTat(chance_of_inverse=COI)
-s10 = RandomChoice(chance_of_inverse=COI)
-s11 = Grofman(chance_of_inverse=COI)
-s12 = Shubik(chance_of_inverse=COI)
-
-
-listOfStrategies = [s1, s2, s3, s4, s5, s6, s7, s8]
+listOfStrategies = [s1, s2, s3, s4, s5, s6]
 game = Game()
 tournament = Tournament(game, listOfStrategies)
-tournament.play_basic_tournament()
+
+print("Implemented basic tournament with the following strategies with all strategies")
+
+while not terminated:
+    inp = input(":")
+    if inp == "run":
+        tournament.play_basic_tournament()
+    elif inp == "results":
+        print(tournament.tournament_history)
+    else:
+        print("wrong")
+
+#s7 = AlwaysDefect(chance_of_inverse=COI)
+#s8 = AlwaysCooperate(chance_of_inverse=COI)
+#s9 = TitForTat(chance_of_inverse=COI)
+#s10 = RandomChoice(chance_of_inverse=COI)
+#s11 = Grofman(chance_of_inverse=COI)
+#s12 = Shubik(chance_of_inverse=COI)
 
 """
 listOfStrategies2 = [s7, s8, s9, s10, s11, s12]

@@ -55,3 +55,8 @@ class Tournament():
             print("This strategy doesn't exist. Please check spelling!")
             return
         return strategy_history
+    
+
+    def reset(self):
+        self.tournament_history = {}
+        self.strategy_scores = {}
