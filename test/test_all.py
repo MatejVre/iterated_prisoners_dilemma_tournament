@@ -3,7 +3,7 @@ import random
 from src import *
 from src.Strategies import *
 from src.Game import Game
-#from src.Tournament import Tournament
+from src.Tournament import Tournament
 
 class TestStrategies():
 
@@ -12,25 +12,25 @@ class TestStrategies():
 
     def test_AlwaysDefect(self):
         #basic cases
-        assert AlwaysDefect().chooseMove(self.COOPERATE) == 1
-        assert AlwaysDefect().chooseMove(self.DEFECT) == 1
+        assert AlwaysDefect().choose_move(self.COOPERATE) == 1
+        assert AlwaysDefect().choose_move(self.DEFECT) == 1
 
 
     def test_AlwaysCooperate(self):
         #basic cases
-        assert AlwaysCooperate().chooseMove(self.COOPERATE) == 0
-        assert AlwaysCooperate().chooseMove(self.DEFECT) == 0
+        assert AlwaysCooperate().choose_move(self.COOPERATE) == 0
+        assert AlwaysCooperate().choose_move(self.DEFECT) == 0
 
 
     def test_TitForTat(self):
         #basic cases
-        assert TitForTat().chooseMove([]) == 0
-        assert TitForTat().chooseMove([1]) == 1
-        assert TitForTat().chooseMove([0]) == 0
+        assert TitForTat().choose_move([]) == 0
+        assert TitForTat().choose_move([1]) == 1
+        assert TitForTat().choose_move([0]) == 0
         #other cases
         history = [0,0,0,0,0,1,1,1,1,1]
         random.shuffle(history)
-        assert TitForTat().chooseMove(history) == history[-1]
+        assert TitForTat().choose_move(history) == history[-1]
 
     
     def test_invert_choice(self):
@@ -48,7 +48,7 @@ class TestStrategies():
         game.strategy2 = random
         moves = game.player_moves
         for i in range(10):
-            game.playGame()
+            game.play_game()
         assert moves["strategy1"][0] == 0
         for m in range(1, (len(moves["strategy1"])-1)):
             if moves["strategy1"][m] == moves["strategy2"][m]:
@@ -63,7 +63,7 @@ class TestStrategies():
         game.strategy2 = alwaysCooperate
         moves = game.player_moves
         for i in range(10):
-            game.playGame()
+            game.play_game()
         for move in moves["strategy1"]:
             assert move == 0
 
@@ -94,3 +94,10 @@ class TestTournamentFunctions():
 
     def get_unique_strategy_pairs():
         pass
+
+    def test_reset(self):
+        t = Tournament(Game(), [Shubik(), Grofman()])
+        t.play_basic_tournament()
+        t.reset()
+        assert t.tournament_history == {}
+        assert t.strategy_scores == {}

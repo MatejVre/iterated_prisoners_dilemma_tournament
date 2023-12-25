@@ -1,5 +1,5 @@
-from Game import Game
-from Strategies import *
+from src.Game import Game
+from src.Strategies import *
 import itertools
 
 class Tournament():
@@ -30,7 +30,7 @@ class Tournament():
             game.strategy2 = strat2
             print("Playing %s against %s" %(strat1.name(), strat2.name()))
             for i in range(self.iterations):
-                game.playGame()
+                game.play_game()
             strat1.reset()
             strat2.reset()
             score = game.add_payoffs()
@@ -40,7 +40,7 @@ class Tournament():
             game.clear_game_history()
             game.clear_player_moves()
 
-    #test
+    #test?? Do i have to test a call to an integrated method??
     def get_unique_strategy_pairs(self):
         return itertools.combinations(self.listOfStrategies, 2)
     
@@ -53,7 +53,7 @@ class Tournament():
                 strategy_history[key] = self.tournament_history[key]
         if len(strategy_history) == 0:
             print("This strategy doesn't exist. Please check spelling!")
-            return
+            return None
         return strategy_history
     
 

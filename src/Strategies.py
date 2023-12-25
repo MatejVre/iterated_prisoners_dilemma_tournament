@@ -1,5 +1,5 @@
 """
-Holds all strategies, defined as classes. The chooseMove method has to have the opponentPastMove
+Holds all strategies, defined as classes. The choose_move method has to have the opponentPastMove
 parameter in order to not break everything. The parameter itself is unnecessary in some cases, however.
 Will see if i can add functions that retain state over multiple calls.
 """
@@ -37,19 +37,19 @@ class Strategy():
 #Tested
 class AlwaysDefect(Strategy):
 
-    def chooseMove(self, opponentPastMove):
+    def choose_move(self, opponentPastMove):
         return self.process_choice(1)
     
 #Tested
 class AlwaysCooperate(Strategy):
 
-    def chooseMove(self, opponentPastMove):
+    def choose_move(self, opponentPastMove):
         return self.process_choice(0)
     
 #Tested
 class TitForTat(Strategy):
 
-    def chooseMove(self, opponentPastMove):
+    def choose_move(self, opponentPastMove):
         if len(opponentPastMove) == 0:
             return self.process_choice(0)
         else:
@@ -58,7 +58,7 @@ class TitForTat(Strategy):
 #Cannot test     
 class RandomChoice(Strategy):
 
-    def chooseMove(self, opponentPastMove):
+    def choose_move(self, opponentPastMove):
         return random.randint(0,1)
 
    
@@ -67,9 +67,11 @@ class RandomChoice(Strategy):
 #Tested
 class Grofman(Strategy):
 
-    own_past_move = None
+    def __init__(self):
+        Strategy.__init__(self)
+        self.own_past_move = None
 
-    def chooseMove(self, opponentPastMove):
+    def choose_move(self, opponentPastMove):
         if self.own_past_move == None:
             choice = self.process_choice(0)
         elif opponentPastMove[-1] == self.own_past_move:
@@ -91,10 +93,12 @@ class Grofman(Strategy):
 #Not tested completely
 class Shubik(Strategy):
 
-    num_of_opp_defects = 0
-    upcoming_defects = 0
+    def __init__(self):
+        Strategy.__init__(self)
+        self.num_of_opp_defects = 0
+        self.upcoming_defects = 0
 
-    def chooseMove(self, opponentPastMove):
+    def choose_move(self, opponentPastMove):
         if len(opponentPastMove) == 0:
             return self.process_choice(0)
         

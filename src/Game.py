@@ -35,9 +35,9 @@ class Game:
         self.player_moves = dict(strategy1 = [], strategy2 = [])
 
     
-    def playGame(self):
-        strategy1_move = self.strategy1.chooseMove(self.player_moves["strategy2"])
-        strategy2_move = self.strategy2.chooseMove(self.player_moves["strategy1"])
+    def play_game(self):
+        strategy1_move = self.strategy1.choose_move(self.player_moves["strategy2"])
+        strategy2_move = self.strategy2.choose_move(self.player_moves["strategy1"])
 
         result = self.RESULT_MATRIX[strategy2_move][strategy1_move]
 

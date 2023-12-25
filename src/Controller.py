@@ -23,14 +23,11 @@ tournament = Tournament(game, listOfStrategies)
 
 print("Implemented basic tournament with the following strategies with all strategies")
 
-while not terminated:
-    inp = input(":")
-    if inp == "run":
-        tournament.play_basic_tournament()
-    elif inp == "results":
-        print(tournament.tournament_history)
-    else:
-        print("wrong")
+
+tournament.play_basic_tournament()
+
+print(tournament.tournament_history)
+
 
 #s7 = AlwaysDefect(chance_of_inverse=COI)
 #s8 = AlwaysCooperate(chance_of_inverse=COI)
