@@ -19,15 +19,16 @@ s5 = Grofman()
 s6 = Shubik()
 s7 = GrimTrigger()
 
-listOfStrategies = [s3, s4, s5, s6, s7]
+listOfStrategies = [s3, s5, s6, s7]
 game = Game()
-tournament = Tournament(game, listOfStrategies)
+tournament = Tournament(listOfStrategies)
 analisys = Analisys()
+
 
 tournament.play_basic_tournament()
 
 print(tournament.tournament_history)
-print(tournament.get_strategy_history("Grofman"))
+print(tournament.strategy_scores)
 analisys.set_strategy_score_data(tournament.strategy_scores)
 print(analisys.create_table_of_averages())
 
