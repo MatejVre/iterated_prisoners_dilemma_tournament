@@ -67,8 +67,8 @@ class RandomChoice(Strategy):
 #Tested
 class Grofman(Strategy):
 
-    def __init__(self):
-        Strategy.__init__(self)
+    def __init__(self, **kwargs):
+        Strategy.__init__(self, **kwargs)
         self.own_past_move = None
 
     def choose_move(self, opponentPastMove):
@@ -93,8 +93,8 @@ class Grofman(Strategy):
 #Not tested completely
 class Shubik(Strategy):
 
-    def __init__(self):
-        Strategy.__init__(self)
+    def __init__(self, **kwargs):
+        Strategy.__init__(self, **kwargs)
         self.num_of_opp_defects = 0
         self.upcoming_defects = 0
 
@@ -117,3 +117,23 @@ class Shubik(Strategy):
         self.num_of_opp_defects = 0
         self.upcoming_defects = 0
 
+
+class GrimTrigger(Strategy):
+
+    def __init__(self, **kwargs):
+        Strategy.__init__(self, **kwargs)
+        self.opponent_defected = False
+
+    def choose_move(self, opponentPastMove):
+        if not self.opponent_defected:
+            if opponentPastMove == [] or opponentPastMove[-1] == 0:
+                return self.process_choice(0)
+            else:
+                self.opponent_defected = True
+                return self.process_choice(1)
+        else:
+            return self.process_choice(1)
+
+
+    def reset(self):
+        self.opponent_defected = False

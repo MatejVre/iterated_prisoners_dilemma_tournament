@@ -1,6 +1,5 @@
 import pytest
 import random
-from src import *
 from src.Strategies import *
 from src.Game import Game
 from src.Tournament import Tournament
@@ -67,6 +66,28 @@ class TestStrategies():
         for move in moves["strategy1"]:
             assert move == 0
 
+    def test_GrimTrigger(self):
+        grimTrigger = GrimTrigger()
+        alwaysCooperate = AlwaysCooperate()
+        game = Game()
+        game.strategy1 = grimTrigger
+        game.strategy2 = alwaysCooperate
+        moves = game.player_moves
+        #Tests that starts with 0
+        for i in range(10):
+            game.play_game()
+        for move in moves["strategy1"]:
+            assert move == 0
+        grimTrigger.reset()
+        game2 = Game()
+        random = RandomChoice()
+        game2.strategy1 = grimTrigger
+        game2.strategy2 = random
+        #test that if a defection occurs, all other choices are defect
+        for i in range(30):
+            game2.play_game()
+        for m in game2.player_moves["strategy1"][game2.player_moves["strategy2"].index(1) +1 :]:
+            assert m == 1
 
 class TestGameFunctions():
 
@@ -87,6 +108,7 @@ class TestGameFunctions():
         g.clear_player_moves()
         assert g.player_moves["strategy1"] == []
         assert g.player_moves["strategy2"] == []
+
 
 
 class TestTournamentFunctions():

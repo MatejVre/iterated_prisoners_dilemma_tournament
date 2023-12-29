@@ -1,11 +1,9 @@
-from src.Game import Game
-from src.Strategies import *
+from Game import Game
+from Strategies import *
 import itertools
 
 class Tournament():
 
-    
-    
 
     def __init__(self, game: Game, listOfStrategies: [Strategy], **kwargs):
         self.game = game
@@ -42,7 +40,7 @@ class Tournament():
 
     #test?? Do i have to test a call to an integrated method??
     def get_unique_strategy_pairs(self):
-        return itertools.combinations(self.listOfStrategies, 2)
+        return itertools.permutations(self.listOfStrategies, 2)
     
 
     #test

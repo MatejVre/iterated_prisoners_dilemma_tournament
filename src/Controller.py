@@ -16,8 +16,9 @@ s3 = TitForTat()
 s4 = RandomChoice()
 s5 = Grofman()
 s6 = Shubik()
+s7 = GrimTrigger()
 
-listOfStrategies = [s1, s2, s3, s4, s5, s6]
+listOfStrategies = [s1, s2, s3, s4, s5, s6, s7]
 game = Game()
 tournament = Tournament(game, listOfStrategies)
 
@@ -27,6 +28,7 @@ print("Implemented basic tournament with the following strategies with all strat
 tournament.play_basic_tournament()
 
 print(tournament.tournament_history)
+print(tournament.get_strategy_history("Grofman"))
 
 
 #s7 = AlwaysDefect(chance_of_inverse=COI)
