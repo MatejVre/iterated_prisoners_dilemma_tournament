@@ -43,16 +43,7 @@ class Tournament():
         return itertools.combinations(self.listOfStrategies, 2)
     
 
-    #test
-    def get_strategy_history(self, strategy_name: str):
-        strategy_history = {}
-        for key in self.tournament_history.keys():
-            if strategy_name in key:
-                strategy_history[key] = self.tournament_history[key]
-        if len(strategy_history) == 0:
-            print("This strategy doesn't exist. Please check spelling!")
-            return None
-        return strategy_history
+    
     
 
     def reset(self):

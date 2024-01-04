@@ -5,9 +5,9 @@ Result matrix based off of:
                 Cooperate   Defect
  -----------+----------------------
  Player 2   |
- Cooperate  |    (2,2)      (3,0)
+ Cooperate  |    (2,2)      (5,0)
             |
- Defect     |    (0,3)      (1,1)
+ Defect     |    (0,5)      (1,1)
  -----------------------------------
  The numbers for the lengths of statements are symbollic
  and will most likely change during the coding process
