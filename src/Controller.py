@@ -20,7 +20,7 @@ s6 = Shubik()
 s7 = GrimTrigger()
 
 listOfStrategies = [s1, s2, s3, s4, s5, s6, s7]
-game = Game()
+
 tournament = Tournament(listOfStrategies)
 analisys = Analisys()
 
