@@ -5,8 +5,8 @@ import itertools
 class Tournament():
 
 
-    def __init__(self, game: Game, listOfStrategies: [Strategy], **kwargs):
-        self.game = game
+    def __init__(self, listOfStrategies: [Strategy], **kwargs):
+        self.game = Game()
         self.listOfStrategies = listOfStrategies
         self.iterations = 200
         self.tournament_history = {}
@@ -34,25 +34,16 @@ class Tournament():
             score = game.add_payoffs()
             self.tournament_history[(strat1.name(), strat2.name())] = score
             self.strategy_scores[strat1.name()] += score[0]
-            self.strategy_scores[strat2.name()] += score[0]
+            self.strategy_scores[strat2.name()] += score[1]
             game.clear_game_history()
             game.clear_player_moves()
 
     #test?? Do i have to test a call to an integrated method??
     def get_unique_strategy_pairs(self):
-        return itertools.permutations(self.listOfStrategies, 2)
+        return itertools.combinations(self.listOfStrategies, 2)
     
 
-    #test
-    def get_strategy_history(self, strategy_name: str):
-        strategy_history = {}
-        for key in self.tournament_history.keys():
-            if strategy_name in key:
-                strategy_history[key] = self.tournament_history[key]
-        if len(strategy_history) == 0:
-            print("This strategy doesn't exist. Please check spelling!")
-            return None
-        return strategy_history
+    
     
 
     def reset(self):

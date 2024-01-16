@@ -118,7 +118,7 @@ class TestTournamentFunctions():
         pass
 
     def test_reset(self):
-        t = Tournament(Game(), [Shubik(), Grofman()])
+        t = Tournament([Shubik(), Grofman()])
         t.play_basic_tournament()
         t.reset()
         assert t.tournament_history == {}
