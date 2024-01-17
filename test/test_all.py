@@ -39,6 +39,7 @@ class TestStrategies():
 
     #Cannot test the entire strategy since one
     #of the conditions work with a random
+    #ASK JULES 
     def test_Grofman(self):
         grofman = Grofman()
         random = RandomChoice()
@@ -88,6 +89,48 @@ class TestStrategies():
             game2.play_game()
         for m in game2.player_moves["strategy1"][game2.player_moves["strategy2"].index(1) +1 :]:
             assert m == 1
+
+    #is random really the best choice?
+    def test_Davis(self):
+        davis = Davis()
+        alwaysCooperate = AlwaysCooperate()
+        alwaysDefect = AlwaysDefect()
+        random = RandomChoice()
+        game = Game()
+        game.strategy1 = davis
+        game.strategy2 = alwaysCooperate
+        moves = game.player_moves
+        #Tests that starts with 0
+        for i in range(100):
+            game.play_game()
+        for move in moves["strategy1"]:
+            assert move == 0
+        game.clear()
+        game.strategy2 = random
+        for i in range(30):
+            game.play_game()
+        for move in moves["strategy1"][10:]:
+            assert move == 1
+
+    
+    def test_Joss(self):
+        joss = Joss()
+        random = RandomChoice()
+        game = Game()
+        moves = game.player_moves
+        game.strategy1 = joss
+        game.strategy2 = random
+        #check defection after each defection
+        for i in range(100):
+            game.play_game()
+        for i in range(99):
+            if moves["strategy2"][i] == 1:
+                assert moves["strategy1"][i+1] == 1
+        #ask Jules again how to test Random behaviour
+        #is this even random behaviour??
+
+
+
 
 class TestGameFunctions():
 

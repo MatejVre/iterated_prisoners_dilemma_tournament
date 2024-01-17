@@ -137,3 +137,49 @@ class GrimTrigger(Strategy):
 
     def reset(self):
         self.opponent_defected = False
+
+
+#This rule cooperates on the first ten moves, and then if there is a defection it defects until the end of the game.
+class Davis(Strategy):
+
+    def __init__(self, **kwargs):
+        Strategy.__init__(self, **kwargs)
+        self.counter = 0
+        self.opponent_defected = False
+
+    
+    def choose_move(self, opponentPastMove):
+        #if opponent didn't defect yet
+        if not self.opponent_defected and len(opponentPastMove) != 0:
+            #check last move
+            self.opponent_defected = True if opponentPastMove[-1] == 1 else False
+
+        if self.counter < 10:
+            self.counter += 1
+            return self.process_choice(0)
+        else:        
+            if self.opponent_defected:
+                return self.process_choice(1)
+            else:
+                return self.process_choice(0)
+    
+    def reset(self):
+        self.counter = 0
+        self.opponent_defected = False
+
+    
+class Joss(Strategy):
+
+    def choose_move(self, opponentPastMove):
+        if len(opponentPastMove) == 0:
+            return self.process_choice(0)
+        else:
+            if opponentPastMove[-1] == 1:
+                return self.process_choice(1)
+            else:
+                #simulate 90% chance of cooperation
+                number = random.randint(1,10)
+                if number <= 9:
+                    return self.process_choice(0)
+                else:
+                    return self.process_choice(1)

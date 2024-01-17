@@ -63,6 +63,10 @@ class Game:
     def clear_player_moves(self):
         self.player_moves["strategy1"] = []
         self.player_moves["strategy2"] = []
+    
+    def clear(self):
+        self.clear_game_history()
+        self.clear_player_moves()
 
 """
 game = Game()

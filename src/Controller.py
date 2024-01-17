@@ -18,8 +18,10 @@ s4 = RandomChoice()
 s5 = Grofman()
 s6 = Shubik()
 s7 = GrimTrigger()
+s8 = Davis()
+s9 = Joss()
 
-listOfStrategies = [s1, s2, s3, s4, s5, s6, s7]
+listOfStrategies = [s1, s2, s3, s4, s5, s6, s7, s8, s9]
 
 tournament = Tournament(listOfStrategies)
 analisys = Analisys()
@@ -34,7 +36,7 @@ analisys.set_tournament_history_data(tournament.tournament_history)
 print(analisys.create_table_of_averages())
 print(analisys.create_history_table())
 print(analisys.get_strategy_history("RandomChoice"))
-print(analisys.create_strategy_history_table("RandomChoice"))
+print(analisys.create_strategy_history_table("Joss"))
 
 #s7 = AlwaysDefect(chance_of_inverse=COI)
 #s8 = AlwaysCooperate(chance_of_inverse=COI)

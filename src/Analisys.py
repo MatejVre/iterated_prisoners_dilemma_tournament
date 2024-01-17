@@ -47,6 +47,7 @@ class Analisys:
                 d.append(strategy)
                 d.append(self.__strategy_score_data[strategy]//number_of_strategies)
                 data_for_table.append(d)
+        data_for_table = sorted(data_for_table, key=lambda x: x[1], reverse=True)
         return(tabulate(data_for_table, headers=head, tablefmt="grid"))
 
 
