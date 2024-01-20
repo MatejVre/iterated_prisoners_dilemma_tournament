@@ -8,27 +8,35 @@ from Analisys import *
 
 #This is the constant that represents the chance of failure
 #It is expressed in %
-terminated = False
-COI = 5
+class Controller():
+    def __init__(self):
+        self.s1 = AlwaysDefect()
+        self.s2 = AlwaysCooperate()
+        self.s3 = TitForTat()
+        self.s4 = RandomChoice()
+        self.s5 = Grofman()
+        self.s6 = Shubik()
+        self.s7 = GrimTrigger()
+        self.s8 = Davis()
+        self.s9 = Joss()
+        
+        self.tournament = None
+        self.analisys = Analisys()
 
-s1 = AlwaysDefect()
-s2 = AlwaysCooperate()
-s3 = TitForTat()
-s4 = RandomChoice()
-s5 = Grofman()
-s6 = Shubik()
-s7 = GrimTrigger()
-s8 = Davis()
-s9 = Joss()
+        self.basic_list_of_strategies = [self.s1, self.s2, self.s3, self.s4, self.s5, self.s6, self.s7, self.s8, self.s9]
 
-listOfStrategies = [s1, s2, s3, s4, s5, s6, s7, s8, s9]
+    def create_basic_tournament(self):
+        self.tournament = Tournament(self.basic_list_of_strategies)
 
-tournament = Tournament(listOfStrategies)
-analisys = Analisys()
+    def play_tournament(self):
+        self.tournament.play_basic_tournament()
+        self.analisys.set_strategy_score_data(self.tournament.strategy_scores)
+        self.analisys.set_tournament_history_data(self.tournament.tournament_history)
 
+    def table_of_averages(self):
+        self.analisys.create_table_of_averages()
 
-tournament.play_basic_tournament()
-
+"""
 print(tournament.tournament_history)
 print(tournament.strategy_scores)
 analisys.set_strategy_score_data(tournament.strategy_scores)
@@ -45,7 +53,7 @@ print(analisys.create_strategy_history_table("Joss"))
 #s11 = Grofman(chance_of_inverse=COI)
 #s12 = Shubik(chance_of_inverse=COI)
 
-"""
+
 listOfStrategies2 = [s7, s8, s9, s10, s11, s12]
 
 
