@@ -20,7 +20,7 @@ class Analisys:
         head = ["Strategy1 vs Strategy2", "Strategy1 | Strategy 2"]
         data_for_table = []
         if self.__tournament_history_data == None:
-            print("Data missing")
+            return ("Data missing")
         else:
             t_hist_data = self.__tournament_history_data
             for game in t_hist_data.keys():
@@ -39,7 +39,7 @@ class Analisys:
         head = ["Strategy", "Average Score"]
         data_for_table = []
         if self.__strategy_score_data == None:
-            print("Data missing")
+            return ("Data missing")
         else:
             number_of_strategies = len(self.__strategy_score_data.keys()) - 1 
             for strategy in self.__strategy_score_data.keys():
@@ -68,7 +68,7 @@ class Analisys:
         data_for_table = []
         strategy_history = self.get_strategy_history(strategy_name)
         if strategy_history == None:
-            return None
+            return "This strategy doesn't exist. Please check spelling!"
         else:
             for game in strategy_history.keys():
                 d = []
