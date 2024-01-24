@@ -3,6 +3,7 @@ import random
 from src.Strategies import *
 from src.Game import Game
 from src.Tournament import Tournament
+from src.Controller import Controller
 
 class TestStrategies():
 
@@ -165,4 +166,18 @@ class TestTournamentFunctions():
         t.play_basic_tournament()
         t.reset()
         assert t.tournament_history == {}
-        assert t.strategy_scores == {}
+        for strat in t.listOfStrategies:
+            assert t.strategy_scores[strat.name()] == 0
+
+
+class TestControllerFunctions():
+
+    def test_add_strategy(self):
+        c = Controller()
+        s1 = c.add_strategy("TitForTat", 1)
+        s2 = c.add_strategy("TitForTat", 1)
+        s3 = c.add_strategy("Joss", 0)
+
+        assert s1 != s2
+        assert s1.name() == "TitForTat-1%"
+        assert s3.name() == "Joss"

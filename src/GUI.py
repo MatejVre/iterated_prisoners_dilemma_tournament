@@ -8,39 +8,92 @@ class StrategyAdder(customtkinter.CTkToplevel):
         self.label = customtkinter.CTkLabel(self, text="Hi there!")
         self.label.pack()
 
-class ManagementFrame(customtkinter.CTkFrame):
-        def __init__(self, master):
-            super().__init__(master)
-            
-            #fill with basic strategies
-            self.fill_with_basic_strategies_button = customtkinter.CTkButton(self, text="Fill with basic strategies", command= lambda : self.fill_with_basic_strategies(master))
-            self.fill_with_basic_strategies_button.grid(row=0, column=0, padx=10, pady=10,)
 
-            #create tournament from filled strategies
-            self.create_tournament_button = customtkinter.CTkButton(self, text="Create tournament", command= lambda : self.create_tournament(master))
-            self.create_tournament_button.grid(row=1, column=0, padx=10, pady=10)
+class AddittionFrame(customtkinter.CTkFrame):
+    def __init__(self, master):
+        super().__init__(master)
 
-            #run tournament
-            self.run_tournament_button = customtkinter.CTkButton(self, text="Run Tournament", command= lambda : self.run_tournament(master))
-            self.run_tournament_button.grid(row=2, column=0, padx=10, pady=10,)
+        #strategy dropdown menu
+        self.strategy_dropdown_menu = customtkinter.CTkOptionMenu(self, values=[x.name() for x in master.controller.basic_list_of_strategies])
+        self.strategy_dropdown_menu.grid(row=0, column=0, pady=10, padx=10)
+ 
+        #COI input field
+        self.COI_input = customtkinter.CTkEntry(self, placeholder_text="0")
+        self.COI_input.grid(row=0, column=1, pady=10, padx=10)
 
-        def fill_with_basic_strategies(self, master):
-            master.controller.fill_with_basic_strategies()
+        #add button
+        self.add_button = customtkinter.CTkButton(self, text="Add", command= lambda : self.add_strategy(master))
+        self.add_button.grid(row=0, column=2, pady=10, padx=10)
+
+    def add_strategy(self, master):
+        strategy_name = self.strategy_dropdown_menu.get()
+        #master.update_main_textbox(strategy_name)
+        COI = self.COI_input.get()
+        if COI == "":
+            #master.update_main_textbox("valid")
+            master.controller.add_strategy(strategy_name, 0)
             master.custom_management_frame.update(master)
+        elif str(COI).isnumeric() and int(COI) >= 0 and int(COI) <=100:
+            #master.update_main_textbox("valid")
+            master.controller.add_strategy(strategy_name, COI)
+            master.custom_management_frame.update(master)
+        else:
+            master.update_main_textbox("Chance of inverse must be an integer between 0 and 100")
 
-        def create_tournament(self, master):
-            if master.controller.custom_list_of_strategies != []:
-                master.controller.create_tournament(200)
-                master.update_main_textbox("Tournament was created!")
-            else:
-                master.update_main_textbox("Not enough strategies for a tournament, please add more!")
 
-        def run_tournament(self, master):
-            if master.controller.tournament != None:
-                master.controller.play_tournament()
-                master.update_main_textbox("Ran tournament")
-            else:
-                master.update_main_textbox("Tournament not created yet! Please create the tournament first!")
+
+
+
+
+
+        
+
+class ManagementFrame(customtkinter.CTkFrame):
+    def __init__(self, master):
+        super().__init__(master)
+        
+        #fill with basic strategies
+        self.fill_with_basic_strategies_button = customtkinter.CTkButton(self, text="Fill with basic strategies", command= lambda : self.fill_with_basic_strategies(master))
+        self.fill_with_basic_strategies_button.grid(row=0, column=1, padx=10, pady=10,)
+
+        #input the number of rounds
+        self.tournament_rounds_input = customtkinter.CTkEntry(self, placeholder_text="number of rounds")
+        self.tournament_rounds_input.grid(row=1, column = 0, padx=10, pady=10)
+
+        #create tournament from filled strategies
+        self.create_tournament_button = customtkinter.CTkButton(self, text="Create tournament", command= lambda : self.create_tournament(master))
+        self.create_tournament_button.grid(row=1, column=1, padx=10, pady=10)
+
+        #run tournament
+        self.run_tournament_button = customtkinter.CTkButton(self, text="Run Tournament", command= lambda : self.run_tournament(master))
+        self.run_tournament_button.grid(row=2, column=1, padx=10, pady=10,)
+
+    def fill_with_basic_strategies(self, master):
+        master.controller.fill_with_basic_strategies()
+        master.custom_management_frame.update(master)
+
+    def create_tournament(self, master):
+        input = self.tournament_rounds_input.get()
+        if len(master.controller.custom_list_of_strategies) < 2:
+            master.update_main_textbox("Not enough strategies for a tournament, please add more!")
+        elif input == "":
+            master.controller.create_tournament(200)
+            master.update_main_textbox("Tournament with 200 rounds was created!")
+        elif str(input).isnumeric():
+            if int(input) >= 1:
+                master.controller.create_tournament(int(input))
+                master.update_main_textbox(f"Tournament with {input} rounds was created!")
+        else:
+            master.update_main_textbox("Number of rounds must be a number of 1 or higher")
+
+    def run_tournament(self, master):
+        if master.controller.tournament != None:
+            master.controller.play_tournament()
+            master.update_main_textbox("Ran tournament")
+        else:
+            master.update_main_textbox("Tournament not created yet! Please create the tournament first!")
+    
+    
 
 class AnalisysFrame(customtkinter.CTkFrame):
 
@@ -97,35 +150,30 @@ class App(customtkinter.CTk):
         self.geometry("1200x800")
         self.resizable(False, False)
         self.main_textbox = customtkinter.CTkTextbox(self, state="disabled", font=customtkinter.CTkFont("terminal", 14))
-        self.main_textbox.grid(row=0, column=1, rowspan=3, padx=10, pady=10, sticky="nesw")
-        self.grid_columnconfigure(1, weight=1)
+        self.main_textbox.grid(row=0, column=1, rowspan=4, padx=10, pady=10, sticky="nesw")
+        self.grid_columnconfigure(1, weight=5)
         self.grid_columnconfigure(0, weight=1)  
         self.grid_rowconfigure(0, weight=1)
         self.grid_rowconfigure(1, weight=1)
         self.grid_rowconfigure(2, weight=1)
 
+        self.addition_frame = AddittionFrame(self)
+        self.addition_frame .grid(row=0, column=0)
+
         self.management_frame = ManagementFrame(self)
-        self.management_frame.grid(row=0, column=0)
+        self.management_frame.grid(row=1, column=0)
 
         self.custom_management_frame = CustomManagementFrame(self)
-        self.custom_management_frame.grid(row=1, column=0, sticky="ew")
+        self.custom_management_frame.grid(row=2, column=0, padx=10, pady=10)
         
         self.analisys_frame = AnalisysFrame(self)
-        self.analisys_frame.grid(row=2, column=0)
+        self.analisys_frame.grid(row=3, column=0)
         
-        
-
     def update_main_textbox(self, value):
         self.main_textbox.configure(state="normal")
         self.main_textbox.delete("0.0", "end")
         self.main_textbox.insert(customtkinter.END, value)
         self.main_textbox.configure(state="disabled")
-    
-
-        
-    
-
-        
 
 app = App()
 app.mainloop()
