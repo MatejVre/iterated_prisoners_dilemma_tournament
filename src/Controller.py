@@ -28,7 +28,8 @@ class Controller():
         self.custom_list_of_strategies = []
 
     def fill_with_basic_strategies(self):
-        self.custom_list_of_strategies.extend(self.basic_list_of_strategies)
+        for strat in self.basic_list_of_strategies:
+            self.add_strategy(strat.name(), 0)
 
     def create_tournament(self, number_of_iterations):
         self.tournament = Tournament(self.custom_list_of_strategies, iterations=number_of_iterations)
@@ -48,6 +49,7 @@ class Controller():
     def clear(self):
         self.tournament = None
         self.analisys = Analisys()
+        self.custom_list_of_strategies = []
 
     def add_strategy(self, name, COI):
         strategy_creator = {}
@@ -55,6 +57,22 @@ class Controller():
             strategy_creator[strat.name()] = strat
         strategy = copy.copy(strategy_creator[name])
         strategy.set_COI(int(COI))
+        #check if there are two of the same (strategy, COI) combination
+        list_of_current_names = [s.name() for s in self.custom_list_of_strategies]
+        if strategy.name() in list_of_current_names:
+            self.name_strategy(strategy)
         self.custom_list_of_strategies.append(strategy)
         return(strategy)
+    
+    #called if there are two of the same (strategy, COI) combination
+    def name_strategy(self, strat):
+        strategy_name = strat.name()
+        counter = 1
+        returned_name = strategy_name + f"-{counter}"
+        list_of_current_names = [s.name() for s in self.custom_list_of_strategies]
+        while returned_name in list_of_current_names:
+            counter += 1
+            returned_name = strategy_name + f"-{counter}"
+        strat.set_given_name(returned_name)
+        return returned_name
         

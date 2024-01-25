@@ -41,13 +41,6 @@ class AddittionFrame(customtkinter.CTkFrame):
             master.update_main_textbox("Chance of inverse must be an integer between 0 and 100")
 
 
-
-
-
-
-
-        
-
 class ManagementFrame(customtkinter.CTkFrame):
     def __init__(self, master):
         super().__init__(master)
@@ -67,6 +60,10 @@ class ManagementFrame(customtkinter.CTkFrame):
         #run tournament
         self.run_tournament_button = customtkinter.CTkButton(self, text="Run Tournament", command= lambda : self.run_tournament(master))
         self.run_tournament_button.grid(row=2, column=1, padx=10, pady=10,)
+
+        #clear all
+        self.clear_button = customtkinter.CTkButton(self, text="Clear all", command= lambda : self.clear_all(master))
+        self.clear_button.grid(row=1, column=3)
 
     def fill_with_basic_strategies(self, master):
         master.controller.fill_with_basic_strategies()
@@ -92,6 +89,10 @@ class ManagementFrame(customtkinter.CTkFrame):
             master.update_main_textbox("Ran tournament")
         else:
             master.update_main_textbox("Tournament not created yet! Please create the tournament first!")
+
+    def clear_all(self, master):
+        master.controller.clear()
+        master.custom_management_frame.update(master)
     
     
 
@@ -136,9 +137,11 @@ class CustomManagementFrame(customtkinter.CTkScrollableFrame):
 
 
     def update(self, master):
+        for child in self.winfo_children():
+            child.destroy()
         for i, strategy in enumerate(master.controller.custom_list_of_strategies):
             self.label = customtkinter.CTkLabel(self, text=strategy.name())
-            self.label.grid(row=i//2, column=(i+1)%2, pady=2, padx=10)
+            self.label.grid(row=i//2, column=(i)%2, pady=2, padx=10)
             
 
 class App(customtkinter.CTk):
@@ -164,10 +167,10 @@ class App(customtkinter.CTk):
         self.management_frame.grid(row=1, column=0)
 
         self.custom_management_frame = CustomManagementFrame(self)
-        self.custom_management_frame.grid(row=2, column=0, padx=10, pady=10)
+        self.custom_management_frame.grid(row=2, column=0, padx=5, pady=5, sticky="we")
         
         self.analisys_frame = AnalisysFrame(self)
-        self.analisys_frame.grid(row=3, column=0)
+        self.analisys_frame.grid(row=3, column=0, padx=5, pady=10,)
         
     def update_main_textbox(self, value):
         self.main_textbox.configure(state="normal")
