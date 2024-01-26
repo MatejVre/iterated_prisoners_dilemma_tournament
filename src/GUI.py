@@ -82,6 +82,7 @@ class ManagementFrame(customtkinter.CTkFrame):
                 master.update_main_textbox(f"Tournament with {input} rounds was created!")
         else:
             master.update_main_textbox("Number of rounds must be a number of 1 or higher")
+        master.custom_management_frame.update(master)
 
     def run_tournament(self, master):
         if master.controller.tournament != None:
@@ -142,6 +143,8 @@ class CustomManagementFrame(customtkinter.CTkScrollableFrame):
         for i, strategy in enumerate(master.controller.custom_list_of_strategies):
             self.label = customtkinter.CTkLabel(self, text=strategy.name())
             self.label.grid(row=i//2, column=(i)%2, pady=2, padx=10)
+            if master.controller.tournament and strategy in master.controller.tournament.listOfStrategies:
+                (self.label.configure(text_color="green"))
             
 
 class App(customtkinter.CTk):

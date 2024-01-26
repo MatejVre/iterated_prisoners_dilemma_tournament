@@ -32,7 +32,10 @@ class Controller():
             self.add_strategy(strat.name(), 0)
 
     def create_tournament(self, number_of_iterations):
-        self.tournament = Tournament(self.custom_list_of_strategies, iterations=number_of_iterations)
+        #python passes arguments as object reference, so i have to create a copy by value to give to the tournament
+        #so i have a clear distinction between the strategies in the tournament and strategies to be added
+        used_strategies = self.custom_list_of_strategies[:]
+        self.tournament = Tournament(used_strategies, iterations=number_of_iterations)
 
     def clear_custom_list_of_strategies(self):
         self.custom_list_of_strategies = []

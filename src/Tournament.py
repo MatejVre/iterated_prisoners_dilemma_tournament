@@ -6,6 +6,7 @@ class Tournament():
 
 
     def __init__(self, listOfStrategies: [Strategy], **kwargs):
+        print("init")
         self.game = Game()
         self.listOfStrategies = listOfStrategies
         self.iterations = 200
