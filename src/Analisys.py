@@ -41,7 +41,7 @@ class Analisys:
         if self.__strategy_score_data == None:
             return ("Data missing")
         else:
-            number_of_strategies = len(self.__strategy_score_data.keys()) - 1 
+            number_of_strategies = len(self.__strategy_score_data.keys())
             for strategy in self.__strategy_score_data.keys():
                 d = []
                 d.append(strategy)

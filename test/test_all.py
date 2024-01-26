@@ -1,4 +1,5 @@
 import pytest
+import randtest
 import random
 from src.Strategies import *
 from src.Game import Game
@@ -48,12 +49,18 @@ class TestStrategies():
         game.strategy1 = grofman
         game.strategy2 = random
         moves = game.player_moves
-        for i in range(10):
-            game.play_game()
+        moves_after_difference = []
+        for i in range(10000):
+            game.play_round()
         assert moves["strategy1"][0] == 0
         for m in range(1, (len(moves["strategy1"])-1)):
             if moves["strategy1"][m] == moves["strategy2"][m]:
                 assert moves["strategy1"][m+1] == 0
+            else:
+                moves_after_difference.append(moves["strategy1"][m+1])
+        no_moves = len(moves_after_difference)
+        no_defections = sum(moves_after_difference)
+        assert no_defections >= (no_moves * (5/7) - no_moves*0.1) and no_defections <= (no_moves * (5/7) + no_moves*0.1)
 
 
     def test_Shubik(self):
@@ -64,7 +71,7 @@ class TestStrategies():
         game.strategy2 = alwaysCooperate
         moves = game.player_moves
         for i in range(10):
-            game.play_game()
+            game.play_round()
         for move in moves["strategy1"]:
             assert move == 0
 
@@ -77,7 +84,7 @@ class TestStrategies():
         moves = game.player_moves
         #Tests that starts with 0
         for i in range(10):
-            game.play_game()
+            game.play_round()
         for move in moves["strategy1"]:
             assert move == 0
         grimTrigger.reset()
@@ -87,7 +94,7 @@ class TestStrategies():
         game2.strategy2 = random
         #test that if a defection occurs, all other choices are defect
         for i in range(30):
-            game2.play_game()
+            game2.play_round()
         for m in game2.player_moves["strategy1"][game2.player_moves["strategy2"].index(1) +1 :]:
             assert m == 1
 
@@ -103,13 +110,13 @@ class TestStrategies():
         moves = game.player_moves
         #Tests that starts with 0
         for i in range(100):
-            game.play_game()
+            game.play_round()
         for move in moves["strategy1"]:
             assert move == 0
         game.clear()
         game.strategy2 = random
         for i in range(30):
-            game.play_game()
+            game.play_round()
         for move in moves["strategy1"][10:]:
             assert move == 1
 
@@ -117,18 +124,49 @@ class TestStrategies():
     def test_Joss(self):
         joss = Joss()
         random = RandomChoice()
+        alwaysCooperate = AlwaysCooperate()
         game = Game()
         moves = game.player_moves
         game.strategy1 = joss
         game.strategy2 = random
         #check defection after each defection
         for i in range(100):
-            game.play_game()
+            game.play_round()
         for i in range(99):
             if moves["strategy2"][i] == 1:
                 assert moves["strategy1"][i+1] == 1
-        #ask Jules again how to test Random behaviour
-        #is this even random behaviour??
+        game.clear()
+        game.strategy2 = alwaysCooperate
+        for i in range(1000):
+            game.play_round()
+        #should be around 90% of cooperations
+        assert sum(moves["strategy1"]) >= 90 and sum(moves["strategy1"]) <= 110
+        
+                
+    def test_RandomChoice(self):
+        random = RandomChoice()
+        joss = Joss()
+        game = Game()
+        moves = game.player_moves
+        game.strategy1 = joss
+        game.strategy2 = random
+        for i in range(1000):
+            game.play_round()
+        assert randtest.random_score(moves["strategy2"])
+
+    def test_process_choice(self):
+        alwaysCooperate = AlwaysCooperate(chance_of_inverse=5)
+        alwaysDefect = AlwaysDefect(chance_of_inverse=5)
+        game = Game()
+        moves = game.player_moves
+        game.strategy1 = alwaysCooperate
+        game.strategy2 = alwaysDefect
+        for i in range(1000):
+            game.play_round()
+        assert randtest.random_score(moves["strategy1"]) and randtest.random_score(moves["strategy2"])
+        
+
+
 
 
 
@@ -166,7 +204,7 @@ class TestTournamentFunctions():
         t.play_basic_tournament()
         t.reset()
         assert t.tournament_history == {}
-        for strat in t.listOfStrategies:
+        for strat in t.list_of_strategies:
             assert t.strategy_scores[strat.name()] == 0
 
 

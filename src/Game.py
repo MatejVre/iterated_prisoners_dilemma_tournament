@@ -17,25 +17,25 @@ Result matrix based off of:
 """
 
 class Game:
-    ZERO = 0
-    MINIMUM_PAYOFF = 1
-    MEDIUM_PAYOFF = 3
-    MAXIMUM_PAYOFF = 5
-    RESULT_MATRIX = [[(MEDIUM_PAYOFF, MEDIUM_PAYOFF), (MAXIMUM_PAYOFF, ZERO)],
-                     [(ZERO, MAXIMUM_PAYOFF), (MINIMUM_PAYOFF, MINIMUM_PAYOFF)]]
-    game_history = []
-    player_moves = {}
-    strategy1 = None
-    strategy2 = None
+
 
 
     def __init__(self):
         #self.strategy1 = strategy1
         #self.strategy2 = strategy2
         self.player_moves = dict(strategy1 = [], strategy2 = [])
+        self.ZERO = 0
+        self.MINIMUM_PAYOFF = 1
+        self.MEDIUM_PAYOFF = 3
+        self.MAXIMUM_PAYOFF = 5
+        self.RESULT_MATRIX = [[(self.MEDIUM_PAYOFF, self.MEDIUM_PAYOFF), (self.MAXIMUM_PAYOFF, self.ZERO)],
+                     [(self.ZERO, self.MAXIMUM_PAYOFF), (self.MINIMUM_PAYOFF, self.MINIMUM_PAYOFF)]]
+        self.game_history = []
+        self.strategy1 = None
+        self.strategy2 = None
 
     
-    def play_game(self):
+    def play_round(self):
         strategy1_move = self.strategy1.choose_move(self.player_moves["strategy2"])
         strategy2_move = self.strategy2.choose_move(self.player_moves["strategy1"])
 

@@ -143,7 +143,7 @@ class CustomManagementFrame(customtkinter.CTkScrollableFrame):
         for i, strategy in enumerate(master.controller.custom_list_of_strategies):
             self.label = customtkinter.CTkLabel(self, text=strategy.name())
             self.label.grid(row=i//2, column=(i)%2, pady=2, padx=10)
-            if master.controller.tournament and strategy in master.controller.tournament.listOfStrategies:
+            if master.controller.tournament and strategy in master.controller.tournament.list_of_strategies:
                 (self.label.configure(text_color="green"))
             
 

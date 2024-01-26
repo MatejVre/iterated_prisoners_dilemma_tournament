@@ -88,17 +88,17 @@ class Grofman(Strategy):
 
     def choose_move(self, opponentPastMove):
         if self.own_past_move == None:
-            choice = self.process_choice(0)
+            choice = 0
         elif opponentPastMove[-1] == self.own_past_move:
-            choice = self.process_choice(0)
+            choice = 0
         else:
             number = random.randint(0,9999)
             if number < 2857:
-                choice = self.process_choice(0)
+                choice = 0
             else:
-                choice = self.process_choice(1)
+                choice = 1
         self.own_past_move = choice
-        return choice
+        return self.process_choice(choice)
     
 
     def reset(self):
@@ -182,7 +182,7 @@ class Davis(Strategy):
         self.counter = 0
         self.opponent_defected = False
 
-    
+#tested   
 class Joss(Strategy):
 
     def choose_move(self, opponentPastMove):

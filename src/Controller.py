@@ -78,4 +78,3 @@ class Controller():
             returned_name = strategy_name + f"-{counter}"
         strat.set_given_name(returned_name)
         return returned_name
-        
