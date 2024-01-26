@@ -9,13 +9,22 @@ import random
 class Strategy():
 
     def __init__(self, **kwargs):
-        if len(kwargs) != 0:
-            self.chance_of_inverse = kwargs["chance_of_inverse"]
+        self.suffix = ""
+        if "chance_of_inverse" in kwargs.keys():
+            self.__chance_of_inverse = kwargs["chance_of_inverse"]
         else:
-            self.chance_of_inverse = 0
+            self.__chance_of_inverse = 0
+        self.__given_name = ""
         
     def name(self):
-        return self.__class__.__name__
+        #if a strategy does not have a given name, it means that the combination (strategy, COI) doesn't yet exist in the tournament
+        if self.__given_name == "":
+            if self.__chance_of_inverse == 0:
+                return self.__class__.__name__
+            else:
+                return self.__class__.__name__ + f"-{self.__chance_of_inverse}%"
+        else:
+            return self.__given_name
     
 
     def invert_choice(self, choice):
@@ -26,13 +35,19 @@ class Strategy():
 
     def process_choice(self, choice):
         random_number = random.randint(0,99)
-        if random_number < self.chance_of_inverse:
+        if random_number < self.__chance_of_inverse:
             return self.invert_choice(choice)
         return choice
     
 
     def reset(self):
         pass
+
+    def set_COI(self, COI):
+        self.__chance_of_inverse = COI
+
+    def set_given_name(self, name):
+        self.__given_name = name
 
 #Tested
 class AlwaysDefect(Strategy):

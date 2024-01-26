@@ -6,6 +6,7 @@ class Tournament():
 
 
     def __init__(self, listOfStrategies: [Strategy], **kwargs):
+        print("init")
         self.game = Game()
         self.listOfStrategies = listOfStrategies
         self.iterations = 200
@@ -43,9 +44,8 @@ class Tournament():
         return itertools.combinations(self.listOfStrategies, 2)
     
 
-    
-    
-
     def reset(self):
         self.tournament_history = {}
         self.strategy_scores = {}
+        for strat in self.listOfStrategies:
+            self.strategy_scores[strat.name()] = 0
