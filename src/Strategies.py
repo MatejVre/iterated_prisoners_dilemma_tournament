@@ -198,3 +198,41 @@ class Joss(Strategy):
                     return self.process_choice(0)
                 else:
                     return self.process_choice(1)
+                
+
+#This rule cooperates on the first eleven
+#moves. I t then cooperates 10% less than the other player has cooperated on the
+#preceding ten moves
+class Tullock(Strategy):
+    
+    def choose_move(self, opponentPastMove):
+        #first 11 moves
+        if len(opponentPastMove) < 11:
+            return self.process_choice(0)
+        else:
+            last_ten_moves = opponentPastMove[-10:]
+            #number of 0's will be the amount of cooperations
+            opponents_cooperations = 10 - sum(last_ten_moves)
+            my_cooperation_chance = opponents_cooperations - 1 #to lower it by 10 %
+            #get a random integer between 1 and 10 including
+            random_number = random.randint(1,10)
+            #for example if opponent cooperated 4 out of 10 times, that's 40%. Minus 10% = 30%. So out of numbers 1 - 10, if
+            #i pick 3 or less, i cooperate; otherwise, defect
+            if my_cooperation_chance in range(1, random_number + 1):
+                return self.process_choice(0)
+            else:
+                return self.process_choice(1)
+            
+
+class GoldenRatio(Strategy):
+    def __init__(self, **kwargs):
+        Strategy.__init__(self, **kwargs)
+        self.golden_ratio_decimals = "6180339887498948482045868343656381177203091798058"
+        self.golden_ratio_decimals_in_binary = ""
+
+        for char in self.golden_ratio_decimals:
+            self.golden_ratio_decimals_in_binary += (bin(int(char))[2:])
+        
+    def choose_move(self, opponentPastMove):
+        return self.process_choice(int(self.golden_ratio_decimals_in_binary[len(opponentPastMove) % len(self.golden_ratio_decimals_in_binary)]))
+

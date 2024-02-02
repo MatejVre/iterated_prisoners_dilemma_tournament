@@ -20,11 +20,13 @@ class Controller():
         self.s7 = GrimTrigger()
         self.s8 = Davis()
         self.s9 = Joss()
+        self.s10 = Tullock()
+        self.s11 = GoldenRatio()
         
         self.tournament = None
         self.analisys = Analisys()
 
-        self.basic_list_of_strategies = [self.s1, self.s2, self.s3, self.s4, self.s5, self.s6, self.s7, self.s8, self.s9]
+        self.basic_list_of_strategies = [self.s1, self.s2, self.s3, self.s4, self.s5, self.s6, self.s7, self.s8, self.s9, self.s10, self.s11]
         self.custom_list_of_strategies = []
 
     def fill_with_basic_strategies(self):

@@ -154,6 +154,7 @@ class TestStrategies():
             game.play_round()
         assert randtest.random_score(moves["strategy2"])
 
+
     def test_process_choice(self):
         alwaysCooperate = AlwaysCooperate(chance_of_inverse=5)
         alwaysDefect = AlwaysDefect(chance_of_inverse=5)
@@ -166,7 +167,22 @@ class TestStrategies():
         assert randtest.random_score(moves["strategy1"]) and randtest.random_score(moves["strategy2"])
         
 
-
+    def test_Tullock(self):
+        tullock = Tullock()
+        alwaysDefect = AlwaysDefect()
+        game = Game()
+        game.strategy1 = tullock
+        game.strategy2 = alwaysDefect
+        moves = game.player_moves
+        for i in range(20):
+            game.play_round()
+        print(moves)
+        #test first 11 are cooperations
+        for x in range(11):
+            assert moves["strategy1"][x] == 0
+        #all after move 11 should be defections
+        for n in range(14,20):
+            assert moves["strategy1"][n] == 1
 
 
 
