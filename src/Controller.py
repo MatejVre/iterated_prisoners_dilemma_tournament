@@ -22,11 +22,12 @@ class Controller():
         self.s9 = Joss()
         self.s10 = Tullock()
         self.s11 = GoldenRatio()
+        self.s12 = Adapter()
         
         self.tournament = None
         self.analisys = Analisys()
 
-        self.basic_list_of_strategies = [self.s1, self.s2, self.s3, self.s4, self.s5, self.s6, self.s7, self.s8, self.s9, self.s10, self.s11]
+        self.basic_list_of_strategies = [self.s1, self.s2, self.s3, self.s4, self.s5, self.s6, self.s7, self.s8, self.s9, self.s10, self.s11, self.s12]
         self.custom_list_of_strategies = []
 
     def fill_with_basic_strategies(self):
@@ -80,3 +81,28 @@ class Controller():
             returned_name = strategy_name + f"-{counter}"
         strat.set_given_name(returned_name)
         return returned_name
+    
+
+    #The two methods defined below are very similar but one has to throw an error if 
+    def remove_strategy_from_tournament(self, name):
+        if len(self.tournament.list_of_strategies) == 2:
+            raise TournamentSizeError("Tournament has to have at least 2 strategies!")
+        else:
+            for strategy in self.tournament.list_of_strategies:
+                if strategy.name() == name:
+                    self.tournament.list_of_strategies.remove(strategy)
+                    self.tournament.reset()
+                    return True
+        return False
+    
+
+    def remove_strategy_from_queue(self, name):
+        for strategy in self.custom_list_of_strategies:
+            if strategy.name() == name:
+                #return true after succesfully removing strat (for testing?)
+                self.custom_list_of_strategies.remove(strategy)
+                return True
+        return False
+    
+class TournamentSizeError(Exception):
+    pass

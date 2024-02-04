@@ -1,5 +1,5 @@
 import customtkinter
-from Controller import Controller
+from Controller import *
 
 class StrategyAdder(customtkinter.CTkToplevel):
     def __init__(self, *args, **kwargs):
@@ -141,11 +141,21 @@ class CustomManagementFrame(customtkinter.CTkScrollableFrame):
         for child in self.winfo_children():
             child.destroy()
         for i, strategy in enumerate(master.controller.custom_list_of_strategies):
-            self.label = customtkinter.CTkLabel(self, text=strategy.name())
-            self.label.grid(row=i//2, column=(i)%2, pady=2, padx=10)
-            if master.controller.tournament and strategy in master.controller.tournament.list_of_strategies:
-                (self.label.configure(text_color="green"))
-            
+            self.label_button = customtkinter.CTkButton(self, text=strategy.name(), fg_color=("#4BA4A6"), text_color="black", command= lambda n = strategy.name() : self.remove_strategy_from_tournament(master, n))
+            self.label_button.grid(row=i//3, column=(i)%3, pady=2, padx=10)
+            if (not master.controller.tournament) or master.controller.tournament and strategy not in master.controller.tournament.list_of_strategies:
+                (self.label_button.configure(fg_color="#1D4646", text_color="grey", command= lambda n = strategy.name() : self.remove_strategy_from_queue(master, n)))
+    
+    def remove_strategy_from_tournament(self, master, name):
+        try:
+            master.controller.remove_strategy_from_tournament(name)
+            self.update(master)
+        except TournamentSizeError as e:
+            master.update_main_textbox(e)
+    
+    def remove_strategy_from_queue(self, master, name):
+        master.controller.remove_strategy_from_queue(name)
+        self.update(master)            
 
 class App(customtkinter.CTk):
     

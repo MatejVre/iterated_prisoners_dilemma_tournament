@@ -236,3 +236,25 @@ class GoldenRatio(Strategy):
     def choose_move(self, opponentPastMove):
         return self.process_choice(int(self.golden_ratio_decimals_in_binary[len(opponentPastMove) % len(self.golden_ratio_decimals_in_binary)]))
 
+
+#strategy i came up with before reading all the strategy definitions. Is quite simmilar to Tullock but i will include it regardless
+class Adapter(Strategy):
+    def __init__(self, **kwargs):
+        Strategy.__init__(self, **kwargs)
+        self.cooperation_chance = 50
+    
+    def choose_move(self, opponentPastMove):
+        if len(opponentPastMove) == 0:
+            return self.process_choice(0)
+        elif len(opponentPastMove) % 10 == 0:
+            opponents_defects = sum(opponentPastMove[-10:])
+            opponents_cooperations = 10 - opponents_defects
+            self.cooperation_chance += (opponents_defects - opponents_cooperations) * 0.2
+        random_number = random.randint(1,100)
+        if self.cooperation_chance in range(1, random_number + 1):
+            return self.process_choice(0)
+        else:
+            return self.process_choice(1)
+
+    
+

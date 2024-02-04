@@ -4,7 +4,7 @@ import random
 from src.Strategies import *
 from src.Game import Game
 from src.Tournament import Tournament
-from src.Controller import Controller
+from src.Controller import *
 
 class TestStrategies():
 
@@ -243,3 +243,19 @@ class TestControllerFunctions():
         list = [s.name() for s in c.custom_list_of_strategies]
         assert  "TitForTat" in list
         assert "TitForTat-1" in list
+
+    def test_remove_strategy_from_tournament(self):
+        c = Controller()
+        c.add_strategy("TitForTat", 0)
+        c.add_strategy("TitForTat", 0)
+        c.create_tournament(200)
+        with pytest.raises(TournamentSizeError) as excinfo:
+            c.remove_strategy_from_tournament("TitForTat")
+        assert str(excinfo.value) == "Tournament has to have at least 2 strategies!"
+        c.clear()
+        c.fill_with_basic_strategies()
+        c.create_tournament(200)
+        assert c.remove_strategy_from_tournament("TitForTat") == True
+        assert c.remove_strategy_from_tournament("Random name that deffinitely does not work") == False
+
+    
