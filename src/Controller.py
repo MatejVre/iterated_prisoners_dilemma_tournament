@@ -3,9 +3,8 @@ from Game import *
 from Player import *
 from Strategies import *
 from Tournament import *
-import matplotlib.pyplot as plt
-import numpy as np
 from Analisys import *
+from Errors import TournamentSizeError
 
 #This is the constant that represents the chance of failure
 #It is expressed in %
@@ -21,27 +20,24 @@ class Controller():
         self.s8 = Davis()
         self.s9 = Joss()
         self.s10 = Tullock()
-        self.s11 = GoldenRatio()
+        self.s11 = Anklebreaker()
         self.s12 = Adapter()
+
         
-        self.tournament = None
+        self.tournament = Tournament()
         self.analisys = Analisys()
 
         self.basic_list_of_strategies = [self.s1, self.s2, self.s3, self.s4, self.s5, self.s6, self.s7, self.s8, self.s9, self.s10, self.s11, self.s12]
-        self.custom_list_of_strategies = []
+        
+        self.strategy_creator = {}
+        for strat in self.basic_list_of_strategies:
+            self.strategy_creator[strat.name()] = strat
+
 
     def fill_with_basic_strategies(self):
         for strat in self.basic_list_of_strategies:
             self.add_strategy(strat.name(), 0)
 
-    def create_tournament(self, number_of_iterations):
-        #python passes arguments as object reference, so i have to create a copy by value to give to the tournament
-        #so i have a clear distinction between the strategies in the tournament and strategies to be added
-        used_strategies = self.custom_list_of_strategies[:]
-        self.tournament = Tournament(used_strategies, iterations=number_of_iterations)
-
-    def clear_custom_list_of_strategies(self):
-        self.custom_list_of_strategies = []
 
     def play_tournament(self):
         self.tournament.reset()
@@ -53,21 +49,18 @@ class Controller():
         self.analisys.create_table_of_averages()
 
     def clear(self):
-        self.tournament = None
+        self.tournament = Tournament()
         self.analisys = Analisys()
-        self.custom_list_of_strategies = []
 
     def add_strategy(self, name, COI):
-        strategy_creator = {}
-        for strat in self.basic_list_of_strategies:
-            strategy_creator[strat.name()] = strat
-        strategy = copy.copy(strategy_creator[name])
+        
+        strategy = copy.copy(self.strategy_creator[name])
         strategy.set_COI(int(COI))
         #check if there are two of the same (strategy, COI) combination
-        list_of_current_names = [s.name() for s in self.custom_list_of_strategies]
+        list_of_current_names = [s.name() for s in self.tournament.list_of_strategies]
         if strategy.name() in list_of_current_names:
             self.name_strategy(strategy)
-        self.custom_list_of_strategies.append(strategy)
+        self.tournament.add_strategy(strategy)
         return(strategy)
     
     #called if there are two of the same (strategy, COI) combination
@@ -75,7 +68,7 @@ class Controller():
         strategy_name = strat.name()
         counter = 1
         returned_name = strategy_name + f"-{counter}"
-        list_of_current_names = [s.name() for s in self.custom_list_of_strategies]
+        list_of_current_names = [s.name() for s in self.tournament.list_of_strategies]
         while returned_name in list_of_current_names:
             counter += 1
             returned_name = strategy_name + f"-{counter}"
@@ -85,24 +78,13 @@ class Controller():
 
     #The two methods defined below are very similar but one has to throw an error if 
     def remove_strategy_from_tournament(self, name):
-        if len(self.tournament.list_of_strategies) == 2:
-            raise TournamentSizeError("Tournament has to have at least 2 strategies!")
-        else:
-            for strategy in self.tournament.list_of_strategies:
-                if strategy.name() == name:
-                    self.tournament.list_of_strategies.remove(strategy)
-                    self.tournament.reset()
-                    return True
-        return False
-    
-
-    def remove_strategy_from_queue(self, name):
-        for strategy in self.custom_list_of_strategies:
+        for strategy in self.tournament.list_of_strategies:
             if strategy.name() == name:
-                #return true after succesfully removing strat (for testing?)
-                self.custom_list_of_strategies.remove(strategy)
+                self.tournament.list_of_strategies.remove(strategy)
                 return True
         return False
     
-class TournamentSizeError(Exception):
-    pass
+
+    def set_tournament_iterations(self, number):
+        self.tournament.set_iterations(number)
+        self.analisys = Analisys()

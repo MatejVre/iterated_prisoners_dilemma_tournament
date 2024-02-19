@@ -58,7 +58,7 @@ class Analisys:
             if strategy_name in key:
                 strategy_history[key] = self.__tournament_history_data[key]
         if len(strategy_history) == 0:
-            print("This strategy doesn't exist. Please check spelling!")
+            print("This strategy doesn't exist. Please check spelling!!!")
             return None
         return strategy_history
     

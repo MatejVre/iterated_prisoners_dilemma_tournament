@@ -1,0 +1,2 @@
+class TournamentSizeError(Exception):
+    pass

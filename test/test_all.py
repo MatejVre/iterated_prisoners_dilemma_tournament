@@ -5,6 +5,7 @@ from src.Strategies import *
 from src.Game import Game
 from src.Tournament import Tournament
 from src.Controller import *
+from src.Errors import TournamentSizeError
 
 class TestStrategies():
 
@@ -185,7 +186,22 @@ class TestStrategies():
             assert moves["strategy1"][n] == 1
 
 
-
+    def test_Anklebreaker(self):
+        random = RandomChoice()
+        anklebreaker = Anklebreaker()
+        game = Game()
+        game.strategy1 = anklebreaker
+        game.strategy2 = random
+        moves = game.player_moves
+        for i in range(100):
+            game.play_round()
+        print(moves["strategy1"])
+        assert moves["strategy1"][0] == 0
+        assert moves["strategy1"][9] == 1
+        
+        supposed_defects = moves["strategy1"][9:-1:10]
+        for x in supposed_defects:
+            assert x == 1
 
 class TestGameFunctions():
 
@@ -211,17 +227,41 @@ class TestGameFunctions():
 
 class TestTournamentFunctions():
 
+    
+    def test_add_strategy(self):
+        shubik = Shubik()
+        alwaysDefect = AlwaysDefect()
+        tournament = Tournament()
+        tournament.add_strategy(shubik)
+        tournament.add_strategy(alwaysDefect)
+        assert shubik in tournament.list_of_strategies and alwaysDefect in tournament.list_of_strategies
 
-    def get_unique_strategy_pairs():
-        pass
 
-    def test_reset(self):
-        t = Tournament([Shubik(), Grofman()])
-        t.play_basic_tournament()
-        t.reset()
-        assert t.tournament_history == {}
-        for strat in t.list_of_strategies:
-            assert t.strategy_scores[strat.name()] == 0
+    def test_add_strategy_score(self):
+        tournament = Tournament()
+        shubik = Shubik()
+        tournament.add_strategy_score(shubik, 500)
+        assert tournament.strategy_scores[shubik.name()] == 500
+        tournament.add_strategy_score(shubik, 500)
+        assert tournament.strategy_scores[shubik.name()] == 1000
+    
+
+    def test_play_basic_tournament(self):
+        tournament = Tournament()
+        alwaysCooperate = AlwaysCooperate()
+        titForTat = TitForTat()
+        tournament.add_strategy(alwaysCooperate)
+        tournament.add_strategy(titForTat)
+        tournament.play_basic_tournament()
+        assert tournament.strategy_scores[titForTat.name()] == 1200
+        assert tournament.strategy_scores[alwaysCooperate.name()] == 1200
+
+    
+    def test_set_iterations(self):
+        t = Tournament()
+        assert t.iterations == 200
+        t.set_iterations(100000000)
+        assert t.iterations == 100000000
 
 
 class TestControllerFunctions():
@@ -240,21 +280,13 @@ class TestControllerFunctions():
         c = Controller()
         c.add_strategy("TitForTat", 0)
         c.add_strategy("TitForTat", 0)
-        list = [s.name() for s in c.custom_list_of_strategies]
+        list = [s.name() for s in c.tournament.list_of_strategies]
         assert  "TitForTat" in list
         assert "TitForTat-1" in list
 
     def test_remove_strategy_from_tournament(self):
         c = Controller()
-        c.add_strategy("TitForTat", 0)
-        c.add_strategy("TitForTat", 0)
-        c.create_tournament(200)
-        with pytest.raises(TournamentSizeError) as excinfo:
-            c.remove_strategy_from_tournament("TitForTat")
-        assert str(excinfo.value) == "Tournament has to have at least 2 strategies!"
-        c.clear()
         c.fill_with_basic_strategies()
-        c.create_tournament(200)
         assert c.remove_strategy_from_tournament("TitForTat") == True
         assert c.remove_strategy_from_tournament("Random name that deffinitely does not work") == False
 

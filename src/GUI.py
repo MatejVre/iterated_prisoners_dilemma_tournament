@@ -54,8 +54,8 @@ class ManagementFrame(customtkinter.CTkFrame):
         self.tournament_rounds_input.grid(row=1, column = 0, padx=10, pady=10)
 
         #create tournament from filled strategies
-        self.create_tournament_button = customtkinter.CTkButton(self, text="Create tournament", command= lambda : self.create_tournament(master))
-        self.create_tournament_button.grid(row=1, column=1, padx=10, pady=10)
+        self.set_rounds_button = customtkinter.CTkButton(self, text="Set rounds", command= lambda : self.set_rounds(master))
+        self.set_rounds_button.grid(row=1, column=1, padx=10, pady=10)
 
         #run tournament
         self.run_tournament_button = customtkinter.CTkButton(self, text="Run Tournament", command= lambda : self.run_tournament(master))
@@ -69,27 +69,22 @@ class ManagementFrame(customtkinter.CTkFrame):
         master.controller.fill_with_basic_strategies()
         master.custom_management_frame.update(master)
 
-    def create_tournament(self, master):
+    def set_rounds(self, master):
         input = self.tournament_rounds_input.get()
-        if len(master.controller.custom_list_of_strategies) < 2:
-            master.update_main_textbox("Not enough strategies for a tournament, please add more!")
-        elif input == "":
-            master.controller.create_tournament(200)
-            master.update_main_textbox("Tournament with 200 rounds was created!")
-        elif str(input).isnumeric():
+        if str(input).isnumeric():
             if int(input) >= 1:
-                master.controller.create_tournament(int(input))
+                master.controller.set_tournament_iterations(int(input))
                 master.update_main_textbox(f"Tournament with {input} rounds was created!")
         else:
             master.update_main_textbox("Number of rounds must be a number of 1 or higher")
         master.custom_management_frame.update(master)
 
     def run_tournament(self, master):
-        if master.controller.tournament != None:
+        try:
             master.controller.play_tournament()
-            master.update_main_textbox("Ran tournament")
-        else:
-            master.update_main_textbox("Tournament not created yet! Please create the tournament first!")
+            master.update_main_textbox(f"Ran tournament with {master.controller.tournament.iterations} rounds")
+        except TournamentSizeError as e:
+            master.update_main_textbox(e)
 
     def clear_all(self, master):
         master.controller.clear()
@@ -135,16 +130,19 @@ class AnalisysFrame(customtkinter.CTkFrame):
 class CustomManagementFrame(customtkinter.CTkScrollableFrame):
     def __init__(self, master):
         super().__init__(master)
+        self.number_of_iterations = customtkinter.CTkLabel(self, text=f"Number of iterations: {master.controller.tournament.iterations}")
+        self.number_of_iterations.grid(row=0, column=0, pady=2, padx=10)
 
 
     def update(self, master):
         for child in self.winfo_children():
             child.destroy()
-        for i, strategy in enumerate(master.controller.custom_list_of_strategies):
-            self.label_button = customtkinter.CTkButton(self, text=strategy.name(), fg_color=("#4BA4A6"), text_color="black", command= lambda n = strategy.name() : self.remove_strategy_from_tournament(master, n))
-            self.label_button.grid(row=i//3, column=(i)%3, pady=2, padx=10)
-            if (not master.controller.tournament) or master.controller.tournament and strategy not in master.controller.tournament.list_of_strategies:
-                (self.label_button.configure(fg_color="#1D4646", text_color="grey", command= lambda n = strategy.name() : self.remove_strategy_from_queue(master, n)))
+        self.number_of_iterations = customtkinter.CTkLabel(self, text=f"Number of iterations: {master.controller.tournament.iterations}")
+        self.number_of_iterations.grid(row=0, column=0, pady=2, padx=10)
+        for i, strategy in enumerate(master.controller.tournament.list_of_strategies):
+            self.label_button = customtkinter.CTkButton(self, text=strategy.name(), command= lambda n = strategy.name() : self.remove_strategy_from_tournament(master, n))
+            self.label_button.grid(row=1 + i//3, column=(i)%3, pady=2, padx=10)
+
     
     def remove_strategy_from_tournament(self, master, name):
         try:
