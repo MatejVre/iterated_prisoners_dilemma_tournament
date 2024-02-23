@@ -1,4 +1,5 @@
 from tabulate import tabulate
+import pandas as pd
 class Analisys:
 
     def __init__(self, tournament_history_data=None, strategy_score_data=None):
@@ -20,7 +21,7 @@ class Analisys:
         head = ["Strategy1 vs Strategy2", "Strategy1 | Strategy 2"]
         data_for_table = []
         if self.__tournament_history_data == None:
-            return ("Data missing")
+            return ("Data missing", None)
         else:
             t_hist_data = self.__tournament_history_data
             for game in t_hist_data.keys():
@@ -31,24 +32,30 @@ class Analisys:
                 d.append(strategies)
                 d.append(score)
                 data_for_table.append(d)
-        return(tabulate(data_for_table, headers=head, tablefmt="grid"))
+        history_data_frame = pd.DataFrame(data_for_table, columns=head)
+        return(tabulate(data_for_table, headers=head, tablefmt="grid"), history_data_frame)
 
     
     #https://www.geeksforgeeks.org/how-to-make-a-table-in-python/
     def create_table_of_averages(self):
         head = ["Strategy", "Average Score"]
+        strategies = []
+        scores = []
         data_for_table = []
         if self.__strategy_score_data == None:
-            return ("Data missing")
+            return ("Data missing", None)
         else:
             number_of_strategies = len(self.__strategy_score_data.keys())
             for strategy in self.__strategy_score_data.keys():
                 d = []
                 d.append(strategy)
-                d.append(self.__strategy_score_data[strategy]//number_of_strategies)
+                score = self.__strategy_score_data[strategy]//number_of_strategies
+                d.append(score)
                 data_for_table.append(d)
         data_for_table = sorted(data_for_table, key=lambda x: x[1], reverse=True)
-        return(tabulate(data_for_table, headers=head, tablefmt="grid"))
+        averages_frame = pd.DataFrame(data_for_table, columns=head)
+        averages_frame.sort_values(by=["Strategy"], ascending=False)
+        return(tabulate(data_for_table, headers=head, tablefmt="grid"), averages_frame)
 
 
     #test
@@ -68,7 +75,7 @@ class Analisys:
         data_for_table = []
         strategy_history = self.get_strategy_history(strategy_name)
         if strategy_history == None:
-            return "This strategy doesn't exist. Please check spelling!"
+            return "This strategy doesn't exist. Please check spelling!", None
         else:
             for game in strategy_history.keys():
                 d = []
@@ -78,4 +85,5 @@ class Analisys:
                 d.append(strategies)
                 d.append(score)
                 data_for_table.append(d)
-        return(tabulate(data_for_table, headers=head, tablefmt="grid"))  
+        strategy_history_frame = pd.DataFrame(data_for_table, columns=head)
+        return(tabulate(data_for_table, headers=head, tablefmt="grid"), strategy_history_frame)  

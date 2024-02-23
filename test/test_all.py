@@ -138,10 +138,10 @@ class TestStrategies():
                 assert moves["strategy1"][i+1] == 1
         game.clear()
         game.strategy2 = alwaysCooperate
-        for i in range(1000):
+        for i in range(10000):
             game.play_round()
         #should be around 90% of cooperations
-        assert sum(moves["strategy1"]) >= 90 and sum(moves["strategy1"]) <= 110
+        assert sum(moves["strategy1"]) >= 900 and sum(moves["strategy1"]) <= 1100
         
                 
     def test_RandomChoice(self):

@@ -1,4 +1,6 @@
+from PIL import Image
 import customtkinter
+from pandas import DataFrame
 from Controller import *
 
 class StrategyAdder(customtkinter.CTkToplevel):
@@ -89,6 +91,9 @@ class ManagementFrame(customtkinter.CTkFrame):
     def clear_all(self, master):
         master.controller.clear()
         master.custom_management_frame.update(master)
+        master.analisys_frame.clipboard_dataframe = None
+        master.update_main_textbox("")
+        master.update_clipboard_button()
     
     
 
@@ -96,6 +101,8 @@ class AnalisysFrame(customtkinter.CTkFrame):
 
     def __init__(self, master):
         super().__init__(master)
+
+        self.clipboard_dataframe = None
 
         #table of averages button
         self.display_table_of_averages_button = customtkinter.CTkButton(self, text="Table of averages", command= lambda : self.show_table_of_averages(master))
@@ -114,17 +121,26 @@ class AnalisysFrame(customtkinter.CTkFrame):
         self.display_strategy_history_table_button.grid(row=1, column=1, padx=10, pady=10, sticky="w")
 
     def show_table_of_averages(self, master):
-        table = master.controller.analisys.create_table_of_averages()
+        result = master.controller.analisys.create_table_of_averages()
+        table = result[0]
+        self.clipboard_dataframe = result[1]
         master.update_main_textbox(table)
+        master.update_clipboard_button()
     
     def show_history_table(self, master):
-        table = master.controller.analisys.create_history_table()
+        result = master.controller.analisys.create_history_table()
+        table = result[0]
+        self.clipboard_dataframe = result[1]
         master.update_main_textbox(table)
+        master.update_clipboard_button()
 
     def show_strategy_history_table(self, master):
         search = self.strategy_input_box.get()
-        table = master.controller.analisys.create_strategy_history_table(search)
+        result = master.controller.analisys.create_strategy_history_table(search) 
+        table = result[0]
+        self.clipboard_dataframe = result[1]
         master.update_main_textbox(table)
+        master.update_clipboard_button()
         
 
 class CustomManagementFrame(customtkinter.CTkScrollableFrame):
@@ -182,12 +198,28 @@ class App(customtkinter.CTk):
         
         self.analisys_frame = AnalisysFrame(self)
         self.analisys_frame.grid(row=3, column=0, padx=5, pady=10,)
+
+        image = customtkinter.CTkImage(dark_image=Image.open("src\\static\\clipboard.png"), size=(30, 30))
+        self.copy_button = customtkinter.CTkButton(self, text="", image=image, width=30, height=30, command= self.copy_to_clipboard, state="disabled")
+        self.copy_button.place(x=1125, y=20)
         
     def update_main_textbox(self, value):
         self.main_textbox.configure(state="normal")
         self.main_textbox.delete("0.0", "end")
         self.main_textbox.insert(customtkinter.END, value)
         self.main_textbox.configure(state="disabled")
+    
+
+    def copy_to_clipboard(self):
+        self.analisys_frame.clipboard_dataframe.to_clipboard()
+    
+
+    def update_clipboard_button(self):
+        clipboard = self.analisys_frame.clipboard_dataframe
+        if not isinstance(clipboard, DataFrame):
+            self.copy_button.configure(state="disabled")
+        else:
+            self.copy_button.configure(state="normal")
 
 app = App()
 app.mainloop()
