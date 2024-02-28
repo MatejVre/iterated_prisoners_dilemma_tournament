@@ -34,9 +34,9 @@ class Controller():
             self.strategy_creator[strat.name()] = strat
 
 
-    def fill_with_basic_strategies(self):
+    def fill_with_basic_strategies(self, COI):
         for strat in self.basic_list_of_strategies:
-            self.add_strategy(strat.name(), 0)
+            self.add_strategy(strat.name(), COI)
 
 
     def play_tournament(self):

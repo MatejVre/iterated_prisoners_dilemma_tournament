@@ -6,6 +6,7 @@ from src.Game import Game
 from src.Tournament import Tournament
 from src.Controller import *
 from src.Errors import TournamentSizeError
+from src.GUI import App
 
 class TestStrategies():
 
@@ -275,3 +276,23 @@ class TestControllerFunctions():
         c.fill_with_basic_strategies()
         assert c.remove_strategy_from_tournament("TitForTat") == True
         assert c.remove_strategy_from_tournament("Random name that deffinitely does not work") == False
+
+
+class TestGUIFunctions():
+    
+    def test_COI_valid(self):
+        app = App()
+        COI = -1
+        assert app.COI_valid(COI) == False
+        COI = 0
+        assert app.COI_valid(COI) == True
+        COI = 1
+        assert app.COI_valid(COI) == True
+        COI = 99
+        assert app.COI_valid(COI) == True
+        COI = 100
+        assert app.COI_valid(COI) == True
+        COI = 101
+        assert app.COI_valid(COI) == False
+        COI = "i am a random string"
+        assert app.COI_valid(COI) == False

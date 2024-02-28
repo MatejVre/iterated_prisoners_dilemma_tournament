@@ -20,7 +20,7 @@ class AddittionFrame(customtkinter.CTkFrame):
         self.strategy_dropdown_menu.grid(row=0, column=0, pady=10, padx=10)
  
         #COI input field
-        self.COI_input = customtkinter.CTkEntry(self, placeholder_text="0")
+        self.COI_input = customtkinter.CTkEntry(self, placeholder_text="COI")
         self.COI_input.grid(row=0, column=1, pady=10, padx=10)
 
         #add button
@@ -35,7 +35,7 @@ class AddittionFrame(customtkinter.CTkFrame):
             #master.update_main_textbox("valid")
             master.controller.add_strategy(strategy_name, 0)
             master.custom_management_frame.update(master)
-        elif str(COI).isnumeric() and int(COI) >= 0 and int(COI) <=100:
+        elif master.COI_valid(COI):
             #master.update_main_textbox("valid")
             master.controller.add_strategy(strategy_name, COI)
             master.custom_management_frame.update(master)
@@ -47,9 +47,13 @@ class ManagementFrame(customtkinter.CTkFrame):
     def __init__(self, master):
         super().__init__(master)
         
+        #Set coi for fill with basic strategies
+        self.COI_for_fill = customtkinter.CTkEntry(self, placeholder_text="COI")
+        self.COI_for_fill.grid(row=0, column=0, padx=10, pady=10)
+
         #fill with basic strategies
         self.fill_with_basic_strategies_button = customtkinter.CTkButton(self, text="Fill with basic strategies", command= lambda : self.fill_with_basic_strategies(master))
-        self.fill_with_basic_strategies_button.grid(row=0, column=1, padx=10, pady=10,)
+        self.fill_with_basic_strategies_button.grid(row=0, column=1, padx=10, pady=10)
 
         #input the number of rounds
         self.tournament_rounds_input = customtkinter.CTkEntry(self, placeholder_text="number of rounds")
@@ -68,8 +72,17 @@ class ManagementFrame(customtkinter.CTkFrame):
         self.clear_button.grid(row=1, column=3)
 
     def fill_with_basic_strategies(self, master):
-        master.controller.fill_with_basic_strategies()
-        master.custom_management_frame.update(master)
+        COI = self.COI_for_fill.get()
+        if COI == "":
+            #master.update_main_textbox("valid")
+            master.controller.fill_with_basic_strategies(0)
+            master.custom_management_frame.update(master)
+        elif master.COI_valid(COI):
+            #master.update_main_textbox("valid")
+            master.controller.fill_with_basic_strategies(COI)
+            master.custom_management_frame.update(master)
+        else:
+            master.update_main_textbox("Chance of inverse must be an integer between 0 and 100")
 
     def set_rounds(self, master):
         input = self.tournament_rounds_input.get()
@@ -254,5 +267,5 @@ class App(customtkinter.CTk):
         else:
             self.copy_button.configure(state="normal")
 
-app = App()
-app.mainloop()
+    def COI_valid(self, COI):
+        return str(COI).isnumeric() and int(COI) >= 0 and int(COI) <=100
