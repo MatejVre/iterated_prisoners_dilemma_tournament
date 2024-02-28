@@ -9,24 +9,24 @@ class Tournament():
 
     def __init__(self):
         print("init")
-        self.game = Game()
         self.list_of_strategies = []
         self.iterations = 200
         self.tournament_history = {}
+        self.strategy_move_history = {}
         self.strategy_scores = {}
 
 
     def play_basic_tournament(self):
-        game = self.game
         #plays all the different combinations of strategy pairs
         if len(self.list_of_strategies) < 2:
             raise TournamentSizeError("Tournament has to have at least 2 strategies!")
         else:
+            
+            self.initialize_strategy_move_history()
             for strategy_pair in self.get_unique_strategy_pairs():
                 strat1 = strategy_pair[0]
                 strat2 = strategy_pair[1]
-                game.strategy1 = strat1
-                game.strategy2 = strat2
+                game = Game(strat1, strat2)
                 print("Playing %s against %s" %(strat1.name(), strat2.name()))
                 for i in range(self.iterations):
                     game.play_round()
@@ -34,6 +34,7 @@ class Tournament():
                 strat2.reset()
                 score = game.add_payoffs()
                 self.tournament_history[(strat1.name(), strat2.name())] = score
+                self.add_strategy_moves(game, strat1, strat2)
                 self.add_strategy_score(strat1, score[0])
                 self.add_strategy_score(strat2, score[1])
                 game.clear()
@@ -41,15 +42,15 @@ class Tournament():
             for strategy in self.list_of_strategies:
                 strat1 = strategy
                 strat2 = copy.copy(strategy)
-                game.strategy1 = strat1
-                game.strategy2 = strat2
+                game = Game(strat1, strat2)
                 print("Playing %s against %s" %(strat1.name(), strat2.name()))
-                for i in range(self.iterations):
+                for _ in range(self.iterations):
                     game.play_round()
                 strat1.reset()
                 strat2.reset()
                 score = game.add_payoffs()
                 self.tournament_history[(strat1.name(), strat2.name())] = score
+                self.add_strategy_moves(game, strat1, strat2)
                 self.add_strategy_score(strat1, score[0])
                 game.clear()
 
@@ -61,6 +62,7 @@ class Tournament():
     def reset(self):
         self.tournament_history = {}
         self.strategy_scores = {}
+        self.matchup_move_history = {}
 
 
     def add_strategy(self, strategy):
@@ -84,3 +86,18 @@ class Tournament():
             self.strategy_scores[strategy.name()] = score
         else:
             self.strategy_scores[strategy.name()] += score
+
+
+    def initialize_strategy_move_history(self):
+        self.strategy_move_history = {}
+        for strategy in self.list_of_strategies:
+            self.strategy_move_history[strategy.name()] = dict()
+
+
+    def add_strategy_moves(self, game, strategy1, strategy2):
+        moves = game.player_moves
+        if strategy1.name() == strategy2.name():
+            self.strategy_move_history[strategy1.name()][strategy2.name()] = [moves[strategy1], moves[strategy2]]
+        else:
+            self.strategy_move_history[strategy1.name()][strategy2.name()] = moves[strategy1]
+            self.strategy_move_history[strategy2.name()][strategy1.name()] = moves[strategy2]

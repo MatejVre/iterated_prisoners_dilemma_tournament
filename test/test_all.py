@@ -46,19 +46,17 @@ class TestStrategies():
     def test_Grofman(self):
         grofman = Grofman()
         random = RandomChoice()
-        game = Game()
-        game.strategy1 = grofman
-        game.strategy2 = random
+        game = Game(grofman, random)
         moves = game.player_moves
         moves_after_difference = []
         for i in range(10000):
             game.play_round()
-        assert moves["strategy1"][0] == 0
-        for m in range(1, (len(moves["strategy1"])-1)):
-            if moves["strategy1"][m] == moves["strategy2"][m]:
-                assert moves["strategy1"][m+1] == 0
+        assert moves[grofman][0] == 0
+        for m in range(1, (len(moves[grofman])-1)):
+            if moves[grofman][m] == moves[random][m]:
+                assert moves[grofman][m+1] == 0
             else:
-                moves_after_difference.append(moves["strategy1"][m+1])
+                moves_after_difference.append(moves[grofman][m+1])
         no_moves = len(moves_after_difference)
         no_defections = sum(moves_after_difference)
         assert no_defections >= (no_moves * (5/7) - no_moves*0.1) and no_defections <= (no_moves * (5/7) + no_moves*0.1)
@@ -67,36 +65,30 @@ class TestStrategies():
     def test_Shubik(self):
         shubik = Shubik()
         alwaysCooperate = AlwaysCooperate()
-        game = Game()
-        game.strategy1 = shubik
-        game.strategy2 = alwaysCooperate
+        game = Game(shubik, alwaysCooperate)
         moves = game.player_moves
         for i in range(10):
             game.play_round()
-        for move in moves["strategy1"]:
+        for move in moves[shubik]:
             assert move == 0
 
     def test_GrimTrigger(self):
         grimTrigger = GrimTrigger()
         alwaysCooperate = AlwaysCooperate()
-        game = Game()
-        game.strategy1 = grimTrigger
-        game.strategy2 = alwaysCooperate
+        random = RandomChoice()
+        game = Game(grimTrigger, alwaysCooperate)
         moves = game.player_moves
         #Tests that starts with 0
         for i in range(10):
             game.play_round()
-        for move in moves["strategy1"]:
+        for move in moves[grimTrigger]:
             assert move == 0
         grimTrigger.reset()
-        game2 = Game()
-        random = RandomChoice()
-        game2.strategy1 = grimTrigger
-        game2.strategy2 = random
+        game2 = Game(grimTrigger, random)
         #test that if a defection occurs, all other choices are defect
         for i in range(30):
             game2.play_round()
-        for m in game2.player_moves["strategy1"][game2.player_moves["strategy2"].index(1) +1 :]:
+        for m in game2.player_moves[grimTrigger][game2.player_moves[random].index(1) +1 :]:
             assert m == 1
 
     #is random really the best choice?
@@ -105,20 +97,18 @@ class TestStrategies():
         alwaysCooperate = AlwaysCooperate()
         alwaysDefect = AlwaysDefect()
         random = RandomChoice()
-        game = Game()
-        game.strategy1 = davis
-        game.strategy2 = alwaysCooperate
+        game = Game(davis, alwaysCooperate)
         moves = game.player_moves
         #Tests that starts with 0
         for i in range(100):
             game.play_round()
-        for move in moves["strategy1"]:
+        for move in moves[davis]:
             assert move == 0
-        game.clear()
-        game.strategy2 = random
+        game = Game(davis, random)
+        moves = game.player_moves
         for i in range(30):
             game.play_round()
-        for move in moves["strategy1"][10:]:
+        for move in moves[davis][10:]:
             assert move == 1
 
     
@@ -126,88 +116,77 @@ class TestStrategies():
         joss = Joss()
         random = RandomChoice()
         alwaysCooperate = AlwaysCooperate()
-        game = Game()
+        game = Game(joss, random)
         moves = game.player_moves
-        game.strategy1 = joss
-        game.strategy2 = random
+
         #check defection after each defection
         for i in range(100):
             game.play_round()
         for i in range(99):
-            if moves["strategy2"][i] == 1:
-                assert moves["strategy1"][i+1] == 1
-        game.clear()
-        game.strategy2 = alwaysCooperate
+            if moves[random][i] == 1:
+                assert moves[joss][i+1] == 1
+        game = Game(joss, alwaysCooperate)
+        moves = game.player_moves
         for i in range(10000):
             game.play_round()
         #should be around 90% of cooperations
-        assert sum(moves["strategy1"]) >= 900 and sum(moves["strategy1"]) <= 1100
+        assert sum(moves[joss]) >= 900 and sum(moves[alwaysCooperate]) <= 1100
         
                 
     def test_RandomChoice(self):
         random = RandomChoice()
         joss = Joss()
-        game = Game()
+        game = Game(random, joss)
         moves = game.player_moves
-        game.strategy1 = joss
-        game.strategy2 = random
         for i in range(1000):
             game.play_round()
-        assert randtest.random_score(moves["strategy2"])
+        assert randtest.random_score(moves[joss])
 
 
     def test_process_choice(self):
         alwaysCooperate = AlwaysCooperate(chance_of_inverse=5)
         alwaysDefect = AlwaysDefect(chance_of_inverse=5)
-        game = Game()
+        game = Game(alwaysCooperate, alwaysDefect)
         moves = game.player_moves
-        game.strategy1 = alwaysCooperate
-        game.strategy2 = alwaysDefect
         for i in range(1000):
             game.play_round()
-        assert randtest.random_score(moves["strategy1"]) and randtest.random_score(moves["strategy2"])
+        assert randtest.random_score(moves[alwaysCooperate]) and randtest.random_score(moves[alwaysDefect])
         
 
     def test_Tullock(self):
         tullock = Tullock()
         alwaysDefect = AlwaysDefect()
-        game = Game()
-        game.strategy1 = tullock
-        game.strategy2 = alwaysDefect
+        game = Game(tullock, alwaysDefect)
         moves = game.player_moves
         for i in range(20):
             game.play_round()
         print(moves)
         #test first 11 are cooperations
         for x in range(11):
-            assert moves["strategy1"][x] == 0
+            assert moves[tullock][x] == 0
         #all after move 11 should be defections
         for n in range(14,20):
-            assert moves["strategy1"][n] == 1
+            assert moves[tullock][n] == 1
 
 
     def test_Anklebreaker(self):
         random = RandomChoice()
         anklebreaker = Anklebreaker()
-        game = Game()
-        game.strategy1 = anklebreaker
-        game.strategy2 = random
+        game = Game(anklebreaker, random)
         moves = game.player_moves
         for i in range(100):
             game.play_round()
-        print(moves["strategy1"])
-        assert moves["strategy1"][0] == 0
-        assert moves["strategy1"][9] == 1
-        
-        supposed_defects = moves["strategy1"][9:-1:10]
+        print(moves[anklebreaker])
+        assert moves[anklebreaker][0] == 0
+        assert moves[anklebreaker][9] == 1
+        supposed_defects = moves[anklebreaker][9:-1:10]
         for x in supposed_defects:
             assert x == 1
 
 class TestGameFunctions():
 
-    game = Game()
-    game.strategy1 = TitForTat()
-    game.strategy2 = TitForTat()
+    game = Game(TitForTat(), TitForTat())
+
     
     def test_clear_history(self):
         g = self.game
@@ -216,12 +195,7 @@ class TestGameFunctions():
         assert g.game_history == []
 
 
-    def test_clear_player_moves(self):
-        g = self.game
-        g.player_moves = dict(strategy1 = [1,0,0,0,1], strategy2 = [0,1,1,1,1])
-        g.clear_player_moves()
-        assert g.player_moves["strategy1"] == []
-        assert g.player_moves["strategy2"] == []
+
 
 
 
@@ -263,6 +237,18 @@ class TestTournamentFunctions():
         t.set_iterations(100000000)
         assert t.iterations == 100000000
 
+    def test_add_strategy_mmoves(self):
+        t = Tournament()
+        alwaysCooperate = AlwaysCooperate()
+        alwaysDefect = AlwaysDefect()
+        t.add_strategy(alwaysCooperate)
+        t.add_strategy(alwaysDefect)
+        t.set_iterations(5)
+        t.play_basic_tournament()
+        matchups = t.strategy_move_history
+        assert matchups[alwaysCooperate.name()][alwaysDefect.name()] == [0,0,0,0,0]
+        assert matchups[alwaysDefect.name()][alwaysCooperate.name()] == [1,1,1,1,1]
+
 
 class TestControllerFunctions():
 
@@ -289,5 +275,3 @@ class TestControllerFunctions():
         c.fill_with_basic_strategies()
         assert c.remove_strategy_from_tournament("TitForTat") == True
         assert c.remove_strategy_from_tournament("Random name that deffinitely does not work") == False
-
-    

@@ -2,9 +2,10 @@ from tabulate import tabulate
 import pandas as pd
 class Analisys:
 
-    def __init__(self, tournament_history_data=None, strategy_score_data=None):
+    def __init__(self, tournament_history_data=None, strategy_score_data=None, matchup_move_history_data=None):
         self.__tournament_history_data = tournament_history_data
         self.__strategy_score_data = strategy_score_data
+        self.__matchup_move_history_data = matchup_move_history_data
 
     def set_tournament_history_data(self, tournament_history_data):
         self.__tournament_history_data = tournament_history_data
@@ -12,10 +13,12 @@ class Analisys:
     def set_strategy_score_data(self, strategy_score_data):
         self.__strategy_score_data = strategy_score_data
 
+    def set_matchup_move_history_data(self, matchup_move_history_data):
+        self.__matchup_move_history_data = matchup_move_history_data
+
     def create_full_table(self):
         if self.__tournament_history_data == None:
             print("Data missing")
-
 
     def create_history_table(self):
         head = ["Strategy1 vs Strategy2", "Strategy1 | Strategy 2"]
@@ -86,4 +89,30 @@ class Analisys:
                 d.append(score)
                 data_for_table.append(d)
         strategy_history_frame = pd.DataFrame(data_for_table, columns=head)
-        return(tabulate(data_for_table, headers=head, tablefmt="grid"), strategy_history_frame)  
+        return(tabulate(data_for_table, headers=head, tablefmt="grid"), strategy_history_frame)
+
+    
+    #GUI will onlly suggest those which are in the list so do i need to check membership?
+    def create_matchup_move_history_table(self, strategy1_name, strategy2_name):
+        head = ["move", strategy1_name, strategy2_name]
+        data_for_table = []
+        data_for_pandas = []
+        data = self.__matchup_move_history_data
+        if data == None:
+            return ("Data missing", None)
+        try:
+            if strategy1_name == strategy2_name:
+                s1_moves = data[strategy1_name][strategy2_name][0]
+                s2_moves = data[strategy1_name][strategy2_name][1]
+            else:
+                s1_moves = data[strategy1_name][strategy2_name]
+                s2_moves = data[strategy2_name][strategy1_name]
+            for i in range(len(s1_moves)):
+                dft = [i, s1_moves[i], s2_moves[i]]
+                data_for_table.append(dft)
+                data_for_pandas.append(dft[1:])
+            pd.set_option("display.max_rows", 10000)
+            matchup_move_history_frame = pd.DataFrame(data_for_pandas, columns=head[1:])
+            return(tabulate(data_for_table, headers=head, tablefmt="grid"), matchup_move_history_frame)
+        except KeyError:
+            return("strategy combination not available!", None)
