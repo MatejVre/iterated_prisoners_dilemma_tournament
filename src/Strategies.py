@@ -224,6 +224,24 @@ class Tullock(Strategy):
                 return self.process_choice(1)
             
 
+class Anklebreaker(Strategy):
+    
+    def __init__(self, **kwargs):
+        Strategy.__init__(self, **kwargs)
+        self.counter = 0
+
+    def choose_move(self, opponentPastMove):
+        if opponentPastMove == [] or self.counter != 9:
+            self.counter += 1
+            return self.process_choice(0)
+        else:
+            self.counter = 0
+            return self.process_choice(1)
+        
+    def reset(self):
+        self.counter = 0
+            
+
 class GoldenRatio(Strategy):
     def __init__(self, **kwargs):
         Strategy.__init__(self, **kwargs)
@@ -241,7 +259,7 @@ class GoldenRatio(Strategy):
 class Adapter(Strategy):
     def __init__(self, **kwargs):
         Strategy.__init__(self, **kwargs)
-        self.cooperation_chance = 50
+        self.cooperation_chance = 70
     
     def choose_move(self, opponentPastMove):
         if len(opponentPastMove) == 0:
@@ -250,11 +268,17 @@ class Adapter(Strategy):
             opponents_defects = sum(opponentPastMove[-10:])
             opponents_cooperations = 10 - opponents_defects
             self.cooperation_chance += (opponents_defects - opponents_cooperations) * 0.2
+            if self.cooperation_chance > 100:
+                self.cooperation_chance == 100
+            elif self.cooperation_chance < 0:
+                self.cooperation_chance == 0
         random_number = random.randint(1,100)
         if self.cooperation_chance in range(1, random_number + 1):
             return self.process_choice(0)
         else:
             return self.process_choice(1)
 
+    def reset(self):
+        self.cooperation_chance = 70
     
 

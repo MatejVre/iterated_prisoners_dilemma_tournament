@@ -5,7 +5,7 @@ Result matrix based off of:
                 Cooperate   Defect
  -----------+----------------------
  Player 2   |
- Cooperate  |    (2,2)      (5,0)
+ Cooperate  |    (3,3)      (5,0)
             |
  Defect     |    (0,5)      (1,1)
  -----------------------------------
@@ -20,10 +20,9 @@ class Game:
 
 
 
-    def __init__(self):
+    def __init__(self, strategy1, strategy2):
         #self.strategy1 = strategy1
         #self.strategy2 = strategy2
-        self.player_moves = dict(strategy1 = [], strategy2 = [])
         self.ZERO = 0
         self.MINIMUM_PAYOFF = 1
         self.MEDIUM_PAYOFF = 3
@@ -31,18 +30,23 @@ class Game:
         self.RESULT_MATRIX = [[(self.MEDIUM_PAYOFF, self.MEDIUM_PAYOFF), (self.MAXIMUM_PAYOFF, self.ZERO)],
                      [(self.ZERO, self.MAXIMUM_PAYOFF), (self.MINIMUM_PAYOFF, self.MINIMUM_PAYOFF)]]
         self.game_history = []
-        self.strategy1 = None
-        self.strategy2 = None
+        self.strategy1 = strategy1
+        self.strategy2 = strategy2
+        self.strategy1_name = strategy1.name()
+        self.strategy2_name = strategy2.name()
+        self.player_moves = {}
+        self.player_moves[self.strategy1] = []
+        self.player_moves[self.strategy2] = []
 
     
     def play_round(self):
-        strategy1_move = self.strategy1.choose_move(self.player_moves["strategy2"])
-        strategy2_move = self.strategy2.choose_move(self.player_moves["strategy1"])
+        strategy1_move = self.strategy1.choose_move(self.player_moves[self.strategy2])
+        strategy2_move = self.strategy2.choose_move(self.player_moves[self.strategy1])
 
         result = self.RESULT_MATRIX[strategy2_move][strategy1_move]
 
-        self.player_moves["strategy1"].append(strategy1_move)
-        self.player_moves["strategy2"].append(strategy2_move)
+        self.player_moves[self.strategy1].append(strategy1_move)
+        self.player_moves[self.strategy2].append(strategy2_move)
         self.game_history.append(result)
         #print(result)
     
@@ -61,12 +65,18 @@ class Game:
 
     #clears both players histories
     def clear_player_moves(self):
-        self.player_moves["strategy1"] = []
-        self.player_moves["strategy2"] = []
+        self.player_moves[self.strategy1] = []
+        self.player_moves[self.strategy2] = []
     
     def clear(self):
         self.clear_game_history()
         self.clear_player_moves()
+
+    def get_strategy1_moves(self):
+        return self.player_moves[self.strategy1]
+    
+    def get_strategy2_moves(self):
+        return self.player_moves[self.strategy2]
 
 """
 game = Game()
