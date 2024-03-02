@@ -181,7 +181,6 @@ class AnalisysFrame(customtkinter.CTkFrame):
     
     def update_strategy_selectors(self, master):
         strat_list = master.controller.tournament.strategy_move_history.keys()
-        print(strat_list)
         if strat_list != []:
             self.strategy_selection_menu1.configure(values=[x for x in strat_list], state="normal")
             self.strategy_selection_menu2.configure(values=[x for x in strat_list], state="normal")
@@ -255,11 +254,9 @@ class App(customtkinter.CTk):
         self.main_textbox.insert(customtkinter.END, value)
         self.main_textbox.configure(state="disabled")
     
-
     def copy_to_clipboard(self):
         self.analisys_frame.clipboard_dataframe.to_clipboard()
     
-
     def update_clipboard_button(self):
         clipboard = self.analisys_frame.clipboard_dataframe
         if not isinstance(clipboard, DataFrame):

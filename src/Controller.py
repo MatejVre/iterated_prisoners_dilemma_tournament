@@ -89,11 +89,3 @@ class Controller():
     def set_tournament_iterations(self, number):
         self.tournament.set_iterations(number)
         self.analisys = Analisys()
-
-""" 
-c = Controller()
-c.add_strategy("TitForTat", 0)
-c.add_strategy("RandomChoice", 0)
-c.play_tournament()
-print(c.analisys.create_matchup_move_history_table("TitForTat", "RandomChoice"))
-"""

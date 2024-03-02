@@ -58,6 +58,7 @@ class Analisys:
         data_for_table = sorted(data_for_table, key=lambda x: x[1], reverse=True)
         averages_frame = pd.DataFrame(data_for_table, columns=head)
         averages_frame.sort_values(by=["Strategy"], ascending=False)
+        print(self.__strategy_score_data)
         return(tabulate(data_for_table, headers=head, tablefmt="grid"), averages_frame)
 
 

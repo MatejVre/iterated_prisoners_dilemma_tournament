@@ -8,7 +8,6 @@ class Tournament():
 
 
     def __init__(self):
-        print("init")
         self.list_of_strategies = []
         self.iterations = 200
         self.tournament_history = {}
