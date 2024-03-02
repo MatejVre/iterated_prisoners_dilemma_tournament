@@ -2,3 +2,4 @@ Pandas
 Tabulate
 Randtest
 Customtkinter
+Pillow
