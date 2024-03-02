@@ -1,10 +1,9 @@
 import copy
-from Game import *
-from Player import *
-from Strategies import *
-from Tournament import *
-from Analisys import *
-from Errors import TournamentSizeError
+from Model.Game import *
+from Model.Strategies import *
+from Model.Tournament import *
+from Model.Analisys import *
+from Model.Errors import TournamentSizeError
 
 #This is the constant that represents the chance of failure
 #It is expressed in %

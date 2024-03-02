@@ -1,12 +1,12 @@
 import pytest
 import randtest
 import random
-from src.Strategies import *
-from src.Game import Game
-from src.Tournament import Tournament
-from src.Controller import *
-from src.Errors import TournamentSizeError
-from src.GUI import App
+from src.Model.Strategies import *
+from src.Model.Game import Game
+from src.Model.Tournament import Tournament
+from src.Controller.Controller import *
+from src.Model.Errors import TournamentSizeError
+from src.View.GUI import App
 
 class TestStrategies():
 
@@ -273,7 +273,7 @@ class TestControllerFunctions():
 
     def test_remove_strategy_from_tournament(self):
         c = Controller()
-        c.fill_with_basic_strategies()
+        c.fill_with_basic_strategies(0)
         assert c.remove_strategy_from_tournament("TitForTat") == True
         assert c.remove_strategy_from_tournament("Random name that deffinitely does not work") == False
 

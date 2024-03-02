@@ -1,8 +1,8 @@
 import copy
-from Game import Game
-from Strategies import *
+from Model.Game import Game
+from Model.Strategies import *
 import itertools
-from Errors import TournamentSizeError
+from Model.Errors import TournamentSizeError
 
 class Tournament():
 

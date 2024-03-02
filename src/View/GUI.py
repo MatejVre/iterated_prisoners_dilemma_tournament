@@ -1,7 +1,7 @@
 from PIL import Image
 import customtkinter
 from pandas import DataFrame
-from Controller import *
+from Controller.Controller import *
 
 class StrategyAdder(customtkinter.CTkToplevel):
     def __init__(self, *args, **kwargs):
