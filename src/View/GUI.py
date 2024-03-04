@@ -118,7 +118,7 @@ class AnalisysFrame(customtkinter.CTkFrame):
         super().__init__(master)
 
         self.clipboard_dataframe = None
-
+        
         #table of averages button
         self.display_table_of_averages_button = customtkinter.CTkButton(self, text="Table of averages", command= lambda : self.show_table_of_averages(master))
         self.display_table_of_averages_button.grid(row=0, column=0, padx=10, pady=10, sticky="w")
@@ -222,6 +222,7 @@ class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
         self.controller = Controller()
+        customtkinter.set_default_color_theme("dark-blue")
         self.title("Iterated Prisoners Dilemma Tournament")
         self.geometry("1200x800")
         self.resizable(False, False)

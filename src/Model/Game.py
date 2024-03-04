@@ -17,17 +17,12 @@ Result matrix based off of:
 """
 
 class Game:
-
-
-
     def __init__(self, strategy1, strategy2):
-        #self.strategy1 = strategy1
-        #self.strategy2 = strategy2
         self.ZERO = 0
         self.MINIMUM_PAYOFF = 1
         self.MEDIUM_PAYOFF = 3
         self.MAXIMUM_PAYOFF = 5
-        self.RESULT_MATRIX = [[(self.MEDIUM_PAYOFF, self.MEDIUM_PAYOFF), (self.MAXIMUM_PAYOFF, self.ZERO)],
+        self.PAYOFF_MATRIX = [[(self.MEDIUM_PAYOFF, self.MEDIUM_PAYOFF), (self.MAXIMUM_PAYOFF, self.ZERO)],
                      [(self.ZERO, self.MAXIMUM_PAYOFF), (self.MINIMUM_PAYOFF, self.MINIMUM_PAYOFF)]]
         self.game_history = []
         self.strategy1 = strategy1
@@ -38,12 +33,12 @@ class Game:
         self.player_moves[self.strategy1] = []
         self.player_moves[self.strategy2] = []
 
-    
+    #Equal to playing one-shot prisoner's dilemma
     def play_round(self):
         strategy1_move = self.strategy1.choose_move(self.player_moves[self.strategy2])
         strategy2_move = self.strategy2.choose_move(self.player_moves[self.strategy1])
 
-        result = self.RESULT_MATRIX[strategy2_move][strategy1_move]
+        result = self.PAYOFF_MATRIX[strategy2_move][strategy1_move]
 
         self.player_moves[self.strategy1].append(strategy1_move)
         self.player_moves[self.strategy2].append(strategy2_move)
@@ -68,6 +63,7 @@ class Game:
         self.player_moves[self.strategy1] = []
         self.player_moves[self.strategy2] = []
     
+    #clears everything
     def clear(self):
         self.clear_game_history()
         self.clear_player_moves()
@@ -78,10 +74,3 @@ class Game:
     def get_strategy2_moves(self):
         return self.player_moves[self.strategy2]
 
-"""
-game = Game()
-game.playGame(0,0)
-game.playGame(0,1)
-game.playGame(1,0)
-game.playGame(1,1)
-"""
