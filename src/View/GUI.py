@@ -7,16 +7,18 @@ from View.TournamentManagementFrame import TournamentManagementFrame
 from View.AnalisysFrame import AnalisysFrame
 from View.StrategyInformationFrame import StrategyInformationFrame
 
+
+
 class App(customtkinter.CTk):
     
     def __init__(self):
         super().__init__()
         self.controller = Controller()
-        customtkinter.set_default_color_theme("dark-blue")
         self.title("Iterated Prisoners Dilemma Tournament")
         self.geometry("1200x800")
+        customtkinter.set_appearance_mode("dark")
         self.resizable(False, False)
-        self.main_textbox = customtkinter.CTkTextbox(self, state="disabled", font=customtkinter.CTkFont("terminal", 14))
+        self.main_textbox = customtkinter.CTkTextbox(self, state="disabled", font=customtkinter.CTkFont("Monaco", 14))
         self.main_textbox.grid(row=0, column=1, rowspan=4, padx=10, pady=10, sticky="nesw")
         self.grid_columnconfigure(1, weight=5)
         self.grid_columnconfigure(0, weight=1)  
