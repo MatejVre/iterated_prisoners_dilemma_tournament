@@ -6,6 +6,7 @@ from View.AdditionFrame import StrategyAddittionFrame
 from View.TournamentManagementFrame import TournamentManagementFrame
 from View.AnalisysFrame import AnalisysFrame
 from View.StrategyInformationFrame import StrategyInformationFrame
+from pathlib import Path
 
 
 
@@ -38,7 +39,7 @@ class App(customtkinter.CTk):
         self.analisys_frame = AnalisysFrame(self)
         self.analisys_frame.grid(row=3, column=0, padx=5, pady=10,)
 
-        image = customtkinter.CTkImage(dark_image=Image.open("src\\static\\clipboard.png"), size=(30, 30))
+        image = customtkinter.CTkImage(dark_image=Image.open(Path("src\\static\\clipboard.png")), size=(30, 30))
         self.copy_button = customtkinter.CTkButton(self, text="", image=image, width=30, height=30, command= self.copy_to_clipboard, state="disabled")
         self.copy_button.place(x=1125, y=20)
         
