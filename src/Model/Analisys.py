@@ -16,9 +16,6 @@ class Analisys:
     def set_matchup_move_history_data(self, matchup_move_history_data):
         self.__matchup_move_history_data = matchup_move_history_data
 
-    def create_full_table(self):
-        if self.__tournament_history_data == None:
-            print("Data missing")
 
     def create_history_table(self):
         head = ["Strategy1 vs Strategy2", "Strategy1 | Strategy 2"]

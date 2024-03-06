@@ -35,6 +35,10 @@ class AnalisysFrame(customtkinter.CTkFrame):
         self.show_moves_button = customtkinter.CTkButton(self, text="Show moves", command= lambda : self.show_strategy_moves(master))
         self.show_moves_button.grid(row=2, column=2, pady=10, padx=10)
 
+#Analisys functions return a tuple. The first element is the table stylized for the user, and the second one is the
+#Pandas dataframe with the same data as the first element (used for copying to clipboard)
+
+
     def show_table_of_averages(self, master):
         result = master.controller.analisys.create_table_of_averages()
         table = result[0]
@@ -66,7 +70,8 @@ class AnalisysFrame(customtkinter.CTkFrame):
         master.update_main_textbox(table)
         master.update_clipboard_button()
 
-    
+    #Used to update the bottom most dropdown menus of the analisys frame based on the
+    #strategies that are currently in the tournament.
     def update_strategy_selectors(self, master):
         strat_list = master.controller.tournament.strategy_move_history.keys()
         print(strat_list)
