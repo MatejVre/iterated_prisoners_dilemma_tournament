@@ -2,11 +2,8 @@ import pytest
 import randtest
 import random
 from src.Model.Strategies import *
-from src.Model.Game import Game
-from src.Model.Tournament import Tournament
 from src.Controller.Controller import *
-from src.Model.Errors import TournamentSizeError
-from src.View.GUI import App
+
 
 class Test_Controller_Functions():
 
