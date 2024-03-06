@@ -3,3 +3,4 @@ Tabulate
 Randtest
 Customtkinter
 Pillow
+Pytest

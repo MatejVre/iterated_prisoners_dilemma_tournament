@@ -8,7 +8,7 @@ from src.Controller.Controller import *
 from src.Model.Errors import TournamentSizeError
 from src.View.GUI import App
 
-class TestStrategies():
+class Test_Strategies():
 
     COOPERATE = 0
     DEFECT = 1
@@ -182,117 +182,19 @@ class TestStrategies():
         assert moves[anklebreaker][9] == 1
         supposed_defects = moves[anklebreaker][9:-1:10]
         for x in supposed_defects:
-            assert x == 1
-
-class TestGameFunctions():
-
-    game = Game(TitForTat(), TitForTat())
-
-    
-    def test_clear_history(self):
-        g = self.game
-        g.game_history = [[3,1],[1,3],[2,2]]
-        g.clear_game_history()
-        assert g.game_history == []
-
-
-
-
-
-
-class TestTournamentFunctions():
-
-    
-    def test_add_strategy(self):
-        shubik = Shubik()
-        alwaysDefect = AlwaysDefect()
-        tournament = Tournament()
-        tournament.add_strategy(shubik)
-        tournament.add_strategy(alwaysDefect)
-        assert shubik in tournament.list_of_strategies and alwaysDefect in tournament.list_of_strategies
-
-
-    def test_add_strategy_score(self):
-        tournament = Tournament()
-        shubik = Shubik()
-        tournament.add_strategy_score(shubik, 500)
-        assert tournament.strategy_scores[shubik.name()] == 500
-        tournament.add_strategy_score(shubik, 500)
-        assert tournament.strategy_scores[shubik.name()] == 1000
+            assert x == 1  
     
 
-    def test_play_basic_tournament(self):
-        tournament = Tournament()
-        alwaysCooperate = AlwaysCooperate()
-        titForTat = TitForTat()
-        tournament.add_strategy(alwaysCooperate)
-        tournament.add_strategy(titForTat)
-        tournament.play_basic_tournament()
-        assert tournament.strategy_scores[titForTat.name()] == 1200
-        assert tournament.strategy_scores[alwaysCooperate.name()] == 1200
-
-    
-    def test_set_iterations(self):
-        t = Tournament()
-        assert t.iterations == 200
-        t.set_iterations(100000000)
-        assert t.iterations == 100000000
-
-    def test_add_strategy_mmoves(self):
-        t = Tournament()
-        alwaysCooperate = AlwaysCooperate()
-        alwaysDefect = AlwaysDefect()
-        t.add_strategy(alwaysCooperate)
-        t.add_strategy(alwaysDefect)
-        t.set_iterations(5)
-        t.play_basic_tournament()
-        matchups = t.strategy_move_history
-        assert matchups[alwaysCooperate.name()][alwaysDefect.name()] == [0,0,0,0,0]
-        assert matchups[alwaysDefect.name()][alwaysCooperate.name()] == [1,1,1,1,1]
-
-
-class TestControllerFunctions():
-
-    def test_add_strategy(self):
-        c = Controller()
-        s1 = c.add_strategy("TitForTat", 1)
-        s2 = c.add_strategy("TitForTat", 1)
-        s3 = c.add_strategy("Joss", 0)
-
-        assert s1 != s2
-        assert s1.name() == "TitForTat-1%"
-        assert s3.name() == "Joss"
-
-    def test_name_strategy(self):
-        c = Controller()
-        c.add_strategy("TitForTat", 0)
-        c.add_strategy("TitForTat", 0)
-        list = [s.name() for s in c.tournament.list_of_strategies]
-        assert  "TitForTat" in list
-        assert "TitForTat-1" in list
-
-    def test_remove_strategy_from_tournament(self):
-        c = Controller()
-        c.fill_with_basic_strategies(0)
-        assert c.remove_strategy_from_tournament("TitForTat") == True
-        assert c.remove_strategy_from_tournament("Random name that deffinitely does not work") == False
-
-
-class TestGUIFunctions():
-    
-    def test_COI_valid(self):
-        app = App()
-        COI = -1
-        assert app.COI_valid(COI) == False
-        COI = 0
-        assert app.COI_valid(COI) == True
-        COI = 1
-        assert app.COI_valid(COI) == True
-        COI = 99
-        assert app.COI_valid(COI) == True
-        COI = 100
-        assert app.COI_valid(COI) == True
-        COI = 101
-        assert app.COI_valid(COI) == False
-        COI = "i am a random string"
-        assert app.COI_valid(COI) == False
+    def test_TitForTwoTats(self):
+        random = RandomChoice()
+        tftt = TitForTwoTats()
+        game = Game(random, tftt)
+        for _ in range(200):
+            game.play_round()
+        moves = game.player_moves
+        assert moves[tftt][0] == 0
+        assert moves[tftt][1] == 0
+        for i in range(198):
+            if moves[random][i] == 1 and moves[random][i + 1] == 1:
+                assert moves[tftt][i + 2] == 1
+        

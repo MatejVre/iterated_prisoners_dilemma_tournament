@@ -21,12 +21,13 @@ class Controller():
         self.s10 = Tullock()
         self.s11 = Anklebreaker()
         self.s12 = Adapter()
+        self.s13 = TitForTwoTats()
 
         
         self.tournament = Tournament()
         self.analisys = Analisys()
 
-        self.basic_list_of_strategies = [self.s1, self.s2, self.s3, self.s4, self.s5, self.s6, self.s7, self.s8, self.s9, self.s10, self.s11, self.s12]
+        self.basic_list_of_strategies = [self.s1, self.s2, self.s3, self.s4, self.s5, self.s6, self.s7, self.s8, self.s9, self.s10, self.s11, self.s12, self.s13]
         
         self.strategy_creator = {}
         for strat in self.basic_list_of_strategies:

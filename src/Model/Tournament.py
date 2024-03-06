@@ -16,12 +16,13 @@ class Tournament():
         self.strategy_scores = {}
 
 
+    #this is quite a long method but it would make no sense to split it into
+    #2 smaller methods. Introduces chances for error which aren't necessary!
     def play_basic_tournament(self):
         #plays all the different combinations of strategy pairs
         if len(self.list_of_strategies) < 2:
             raise TournamentSizeError("Tournament has to have at least 2 strategies!")
         else:
-            
             self.initialize_strategy_move_history()
             for strategy_pair in self.get_unique_strategy_pairs():
                 strat1 = strategy_pair[0]

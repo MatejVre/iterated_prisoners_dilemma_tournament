@@ -3,14 +3,6 @@ import customtkinter
 from pandas import DataFrame
 from Controller.Controller import *
 
-class StrategyAdder(customtkinter.CTkToplevel):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.geometry("300x200+600+400")
-        self.label = customtkinter.CTkLabel(self, text="Hi there!")
-        self.label.pack()
-
-
 class AddittionFrame(customtkinter.CTkFrame):
     def __init__(self, master):
         super().__init__(master)

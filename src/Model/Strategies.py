@@ -1,5 +1,5 @@
 """
-Holds all strategies, defined as classes. The choose_move method has to have the opponentPastMove
+Holds all strategies, defined as classes. The choose_move method has to have the opponents_past_moves
 parameter in order to not break everything. The parameter itself is unnecessary in some cases, however.
 Will see if i can add functions that retain state over multiple calls.
 """
@@ -52,28 +52,28 @@ class Strategy():
 #Tested
 class AlwaysDefect(Strategy):
 
-    def choose_move(self, opponentPastMove):
+    def choose_move(self, opponents_past_moves):
         return self.process_choice(1)
     
 #Tested
 class AlwaysCooperate(Strategy):
 
-    def choose_move(self, opponentPastMove):
+    def choose_move(self, opponents_past_moves):
         return self.process_choice(0)
     
 #Tested
 class TitForTat(Strategy):
 
-    def choose_move(self, opponentPastMove):
-        if len(opponentPastMove) == 0:
+    def choose_move(self, opponents_past_moves):
+        if len(opponents_past_moves) == 0:
             return self.process_choice(0)
         else:
-            return self.process_choice(opponentPastMove[-1])
+            return self.process_choice(opponents_past_moves[-1])
         
 #Cannot test     
 class RandomChoice(Strategy):
 
-    def choose_move(self, opponentPastMove):
+    def choose_move(self, opponents_past_moves):
         return random.randint(0,1)
 
    
@@ -86,10 +86,10 @@ class Grofman(Strategy):
         Strategy.__init__(self, **kwargs)
         self.own_past_move = None
 
-    def choose_move(self, opponentPastMove):
+    def choose_move(self, opponents_past_moves):
         if self.own_past_move == None:
             choice = 0
-        elif opponentPastMove[-1] == self.own_past_move:
+        elif opponents_past_moves[-1] == self.own_past_move:
             choice = 0
         else:
             number = random.randint(0,9999)
@@ -113,11 +113,11 @@ class Shubik(Strategy):
         self.num_of_opp_defects = 0
         self.upcoming_defects = 0
 
-    def choose_move(self, opponentPastMove):
-        if len(opponentPastMove) == 0:
+    def choose_move(self, opponents_past_moves):
+        if len(opponents_past_moves) == 0:
             return self.process_choice(0)
         
-        if opponentPastMove[-1] == 1:
+        if opponents_past_moves[-1] == 1:
             self.num_of_opp_defects += 1
             self.upcoming_defects += self.num_of_opp_defects
         
@@ -139,9 +139,9 @@ class GrimTrigger(Strategy):
         Strategy.__init__(self, **kwargs)
         self.opponent_defected = False
 
-    def choose_move(self, opponentPastMove):
+    def choose_move(self, opponents_past_moves):
         if not self.opponent_defected:
-            if opponentPastMove == [] or opponentPastMove[-1] == 0:
+            if opponents_past_moves == [] or opponents_past_moves[-1] == 0:
                 return self.process_choice(0)
             else:
                 self.opponent_defected = True
@@ -163,11 +163,11 @@ class Davis(Strategy):
         self.opponent_defected = False
 
     
-    def choose_move(self, opponentPastMove):
+    def choose_move(self, opponents_past_moves):
         #if opponent didn't defect yet
-        if not self.opponent_defected and len(opponentPastMove) != 0:
+        if not self.opponent_defected and len(opponents_past_moves) != 0:
             #check last move
-            self.opponent_defected = True if opponentPastMove[-1] == 1 else False
+            self.opponent_defected = True if opponents_past_moves[-1] == 1 else False
 
         if self.counter < 10:
             self.counter += 1
@@ -185,11 +185,11 @@ class Davis(Strategy):
 #tested   
 class Joss(Strategy):
 
-    def choose_move(self, opponentPastMove):
-        if len(opponentPastMove) == 0:
+    def choose_move(self, opponents_past_moves):
+        if len(opponents_past_moves) == 0:
             return self.process_choice(0)
         else:
-            if opponentPastMove[-1] == 1:
+            if opponents_past_moves[-1] == 1:
                 return self.process_choice(1)
             else:
                 #simulate 90% chance of cooperation
@@ -205,12 +205,12 @@ class Joss(Strategy):
 #preceding ten moves
 class Tullock(Strategy):
     
-    def choose_move(self, opponentPastMove):
+    def choose_move(self, opponents_past_moves):
         #first 11 moves
-        if len(opponentPastMove) < 11:
+        if len(opponents_past_moves) < 11:
             return self.process_choice(0)
         else:
-            last_ten_moves = opponentPastMove[-10:]
+            last_ten_moves = opponents_past_moves[-10:]
             #number of 0's will be the amount of cooperations
             opponents_cooperations = 10 - sum(last_ten_moves)
             my_cooperation_chance = opponents_cooperations - 1 #to lower it by 10 %
@@ -230,8 +230,8 @@ class Anklebreaker(Strategy):
         Strategy.__init__(self, **kwargs)
         self.counter = 0
 
-    def choose_move(self, opponentPastMove):
-        if opponentPastMove == [] or self.counter != 9:
+    def choose_move(self, opponents_past_moves):
+        if opponents_past_moves == [] or self.counter != 9:
             self.counter += 1
             return self.process_choice(0)
         else:
@@ -251,8 +251,8 @@ class GoldenRatio(Strategy):
         for char in self.golden_ratio_decimals:
             self.golden_ratio_decimals_in_binary += (bin(int(char))[2:])
         
-    def choose_move(self, opponentPastMove):
-        return self.process_choice(int(self.golden_ratio_decimals_in_binary[len(opponentPastMove) % len(self.golden_ratio_decimals_in_binary)]))
+    def choose_move(self, opponents_past_moves):
+        return self.process_choice(int(self.golden_ratio_decimals_in_binary[len(opponents_past_moves) % len(self.golden_ratio_decimals_in_binary)]))
 
 
 #strategy i came up with before reading all the strategy definitions. Is quite simmilar to Tullock but i will include it regardless
@@ -261,11 +261,11 @@ class Adapter(Strategy):
         Strategy.__init__(self, **kwargs)
         self.cooperation_chance = 70
     
-    def choose_move(self, opponentPastMove):
-        if len(opponentPastMove) == 0:
+    def choose_move(self, opponents_past_moves):
+        if len(opponents_past_moves) == 0:
             return self.process_choice(0)
-        elif len(opponentPastMove) % 10 == 0:
-            opponents_defects = sum(opponentPastMove[-10:])
+        elif len(opponents_past_moves) % 10 == 0:
+            opponents_defects = sum(opponents_past_moves[-10:])
             opponents_cooperations = 10 - opponents_defects
             self.cooperation_chance += (opponents_defects - opponents_cooperations) * 0.2
             if self.cooperation_chance > 100:
@@ -282,3 +282,28 @@ class Adapter(Strategy):
         self.cooperation_chance = 70
     
 
+class TitForTwoTats(Strategy):
+
+    def choose_move(self, opponents_past_moves):
+        if len(opponents_past_moves) < 2:
+            return self.process_choice(0)
+        elif opponents_past_moves[-2:] == [1, 1]:
+            return self.process_choice(1)
+        else:
+            return self.process_choice(0)
+
+"""
+class Graaskamp(Strategy):
+
+    def __init__(self, **kwargs):
+        Strategy.__init__(self, **kwargs)
+        self.counter = 0
+        self.random_opponent = False
+
+    def choose_move(self, opponents_past_moves):
+        if self.random_opponent:
+            return self.process_choice(1)
+        elif self.counter >= 49:
+            return self.process_choice(0)
+        elif
+""" 
