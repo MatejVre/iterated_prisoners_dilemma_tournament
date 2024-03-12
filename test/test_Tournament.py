@@ -35,7 +35,6 @@ class Test_Tournament():
         assert (titForTat.name(), titForTat.name()) in tournament.tournament_history
 
 
-
     def test_play_basic_tournament_error(self):
         tournament = Tournament()
         with pytest.raises(TournamentSizeError) as excinfo:

@@ -7,19 +7,17 @@ from src.Model.Game import Game
 
 class Test_Strategies():
 
-    COOPERATE = 0
-    DEFECT = 1
 
     def test_AlwaysDefect(self):
         #basic cases
-        assert AlwaysDefect().choose_move(self.COOPERATE) == 1
-        assert AlwaysDefect().choose_move(self.DEFECT) == 1
+        assert AlwaysDefect().choose_move(1) == 1
+        assert AlwaysDefect().choose_move(0) == 1
 
 
     def test_AlwaysCooperate(self):
         #basic cases
-        assert AlwaysCooperate().choose_move(self.COOPERATE) == 0
-        assert AlwaysCooperate().choose_move(self.DEFECT) == 0
+        assert AlwaysCooperate().choose_move(0) == 0
+        assert AlwaysCooperate().choose_move(1) == 0
 
 
     def test_TitForTat(self):
@@ -38,9 +36,6 @@ class Test_Strategies():
         assert Strategy().invert_choice(1) == 0
 
 
-    #Cannot test the entire strategy since one
-    #of the conditions work with a random
-    #ASK JULES 
     def test_Grofman(self):
         grofman = Grofman()
         random = RandomChoice()

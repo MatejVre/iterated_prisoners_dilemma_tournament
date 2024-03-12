@@ -54,7 +54,7 @@ class Tournament():
                 self.add_strategy_moves(game, strat1, strat2)
                 self.add_strategy_score(strat1, score[0])
                 game.clear()
-
+                
     #test?? Do i have to test a call to an integrated method??
     def get_unique_strategy_pairs(self):
         return itertools.combinations(self.list_of_strategies, 2)

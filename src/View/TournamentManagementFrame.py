@@ -42,12 +42,11 @@ class TournamentManagementFrame(customtkinter.CTkFrame):
 
     def set_rounds(self, master):
         input = self.tournament_rounds_input.get()
-        if str(input).isnumeric():
-            if int(input) >= 1:
-                master.controller.set_tournament_iterations(int(input))
-                master.update_main_textbox(f"Tournament with {input} rounds was created!")
+        response = master.controller.set_iterations(input)
+        if response:
+            master.update_main_textbox(f"Number of iterations set to {input}")
         else:
-            master.update_main_textbox("Number of rounds must be a number of 1 or higher")
+            master.update_main_textbox("Number of rounds must be an integer between 1 or 10,000")
         master.custom_management_frame.update(master)
 
     def run_tournament(self, master):

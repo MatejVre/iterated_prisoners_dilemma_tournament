@@ -1,4 +1,5 @@
 import customtkinter
+from src.Model.Errors import DataError
 
 class AnalisysFrame(customtkinter.CTkFrame):
 
@@ -20,7 +21,7 @@ class AnalisysFrame(customtkinter.CTkFrame):
         self.strategy_input_box.grid(row=1, column=0)
 
         #strategy history table button
-        self.display_strategy_history_table_button = customtkinter.CTkButton(self, text="Strategy table", command= lambda : self.show_strategy_history_table(master))
+        self.display_strategy_history_table_button = customtkinter.CTkButton(self, text="Strategy history table", command= lambda : self.show_strategy_history_table(master))
         self.display_strategy_history_table_button.grid(row=1, column=1, padx=10, pady=10, sticky="w")
 
         #strategy selector 1
@@ -40,31 +41,44 @@ class AnalisysFrame(customtkinter.CTkFrame):
 
 
     def show_table_of_averages(self, master):
-        result = master.controller.analisys.create_table_of_averages()
-        table = result[0]
-        self.clipboard_dataframe = result[1]
-        master.update_main_textbox(table)
-        master.update_clipboard_button()
+        try:
+            result = master.controller.table_of_averages()
+            table = result[0]
+            self.clipboard_dataframe = result[1]
+            master.update_main_textbox(table)
+            master.update_clipboard_button()
+        except DataError as e:
+            master.update_main_textbox(e)
+            master.update_clipboard_button()
     
     def show_history_table(self, master):
-        result = master.controller.analisys.create_history_table()
-        table = result[0]
-        self.clipboard_dataframe = result[1]
-        master.update_main_textbox(table)
-        master.update_clipboard_button()
+        try:
+            result = master.controller.history_table()
+            table = result[0]
+            self.clipboard_dataframe = result[1]
+            master.update_main_textbox(table)
+            master.update_clipboard_button()
+        except DataError as e:
+            master.update_main_textbox(e)
+            master.update_clipboard_button()
+
 
     def show_strategy_history_table(self, master):
-        search = self.strategy_input_box.get()
-        result = master.controller.analisys.create_strategy_history_table(search) 
-        table = result[0]
-        self.clipboard_dataframe = result[1]
-        master.update_main_textbox(table)
-        master.update_clipboard_button()
+        try:
+            search = self.strategy_input_box.get()
+            result = master.controller.strategy_history_table(search)
+            table = result[0]
+            self.clipboard_dataframe = result[1]
+            master.update_main_textbox(table)
+            master.update_clipboard_button()
+        except DataError as e:
+            master.update_main_textbox(e)
+            master.update_clipboard_button()
     
     def show_strategy_moves(self, master):
         strategy1 = self.strategy_selection_menu1.get()
         strategy2 = self.strategy_selection_menu2.get()
-        result = master.controller.analisys.create_matchup_move_history_table(strategy1, strategy2)
+        result = master.controller.matchup_move_history_table(strategy1, strategy2)
         table = result[0]
         self.clipboard_dataframe = result[1]
         master.update_main_textbox(table)

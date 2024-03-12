@@ -38,7 +38,7 @@ class Controller():
         for strat in self.basic_list_of_strategies:
             self.add_strategy(strat.name(), COI)
 
-
+    
     def play_tournament(self):
         self.tournament.reset()
         self.tournament.play_basic_tournament()
@@ -46,13 +46,28 @@ class Controller():
         self.analisys.set_tournament_history_data(self.tournament.tournament_history)
         self.analisys.set_matchup_move_history_data(self.tournament.strategy_move_history)
 
+    #call to other method, no need for testing
     def table_of_averages(self):
-        self.analisys.create_table_of_averages()
+        return self.analisys.create_table_of_averages()
+    
+    #call to other method, no need for testing
+    def history_table(self):
+        return self.analisys.create_history_table()
+    
+    #call to other method, no need for testing
+    def strategy_history_table(self, search):
+        return self.analisys.create_strategy_history_table(search)
+    
+    #call to other method, no need for testing
+    def matchup_move_history_table(self, strategy1, strategy2):
+        return self.analisys.create_matchup_move_history_table(strategy1, strategy2)
 
+    #call to other method, no need for testing
     def clear(self):
         self.tournament = Tournament()
         self.analisys = Analisys()
 
+    #tested
     def add_strategy(self, name, COI):
         
         strategy = copy.copy(self.strategy_creator[name])
@@ -65,6 +80,7 @@ class Controller():
         return(strategy)
     
     #called if there are two of the same (strategy, COI) combination
+    #tested
     def name_strategy(self, strat):
         strategy_name = strat.name()
         counter = 1
@@ -86,14 +102,15 @@ class Controller():
         return False
     
 
+    def set_iterations(self, input):
+        if str(input).isnumeric():
+            if int(input) >= 1 and int(input) <= 10000:
+                self.set_tournament_iterations(int(input))
+                return True
+        return False
+
+    #call to other method, no need for testing
     def set_tournament_iterations(self, number):
         self.tournament.set_iterations(number)
         self.analisys = Analisys()
 
-""" 
-c = Controller()
-c.add_strategy("TitForTat", 0)
-c.add_strategy("RandomChoice", 0)
-c.play_tournament()
-print(c.analisys.create_matchup_move_history_table("TitForTat", "RandomChoice"))
-"""
