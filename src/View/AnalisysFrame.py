@@ -78,11 +78,15 @@ class AnalisysFrame(customtkinter.CTkFrame):
     def show_strategy_moves(self, master):
         strategy1 = self.strategy_selection_menu1.get()
         strategy2 = self.strategy_selection_menu2.get()
-        result = master.controller.matchup_move_history_table(strategy1, strategy2)
-        table = result[0]
-        self.clipboard_dataframe = result[1]
-        master.update_main_textbox(table)
-        master.update_clipboard_button()
+        try:
+            result = master.controller.matchup_move_history_table(strategy1, strategy2)
+            table = result[0]
+            self.clipboard_dataframe = result[1]
+            master.update_main_textbox(table)
+            master.update_clipboard_button()
+        except (DataError, KeyError) as e:
+            master.update_main_textbox(e)
+            master.update_clipboard_button()
 
     #Used to update the bottom most dropdown menus of the analisys frame based on the
     #strategies that are currently in the tournament.

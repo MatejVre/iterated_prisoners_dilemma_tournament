@@ -19,26 +19,29 @@ class Analisys:
 
     #tested
     def create_history_table(self):
-        head = ["Strategy1 vs Strategy2", "Strategy1 | Strategy 2"]
+        head = ["Strategy1", "Strategy2", "Strategy1", "Strategy 2"]
         data_for_table = []
         if self.__tournament_history_data == None:
             raise DataError("Data missing!")
         else:
-            t_hist_data = self.__tournament_history_data
-            data_for_table = self.create_data_for_history_table(t_hist_data)
+            
+            data_for_table = self.create_data_for_history_table()
         history_data_frame = pd.DataFrame(data_for_table, columns=head)
         return(tabulate(data_for_table, headers=head, tablefmt="grid"), history_data_frame)
     
     #tested
-    def create_data_for_history_table(self, t_hist_data):
+    def create_data_for_history_table(self):
+        t_hist_data = self.__tournament_history_data
         data_for_table = []
         for game in t_hist_data.keys():
                 d = []
-                strategies = f"{game[0]} vs {game[1]}"
+                strategies = [game[0], game[1]]
                 s = t_hist_data[game]
-                score = f"{s[0]} | {s[1]}"
-                d.append(strategies)
-                d.append(score)
+                score = [s[0], s[1]]
+                for strat in strategies:
+                    d.append(strat)
+                for s in score:
+                    d.append(s)
                 data_for_table.append(d)
         return data_for_table
 
@@ -84,7 +87,7 @@ class Analisys:
     
 
     def create_strategy_history_table(self, strategy_name: str):
-        head = ["Strategy1 vs Strategy2", "Strategy1 | Strategy 2"]
+        head = ["Strategy1", "Strategy2", "Strategy1", "Strategy 2"]
         data_for_table = []
         strategy_history = self.get_strategy_history(strategy_name)
         if strategy_history == None:
@@ -99,15 +102,17 @@ class Analisys:
         for game in strategy_history.keys():
                 d = []
                 if game[0] == strategy_name:
-                    strategies = f"{game[0]} vs {game[1]}"
+                    strategies = [game[0], game[1]]
                     s = strategy_history[game]
-                    score = f"{s[0]} | {s[1]}"
+                    score = [s[0], s[1]]
                 else:
-                    strategies = f"{game[1]} vs {game[0]}"
+                    strategies = [game[1], game[0]]
                     s = strategy_history[game]
-                    score = f"{s[1]} | {s[0]}"
-                d.append(strategies)
-                d.append(score)
+                    score = [s[1], s[0]]
+                for str in strategies:
+                    d.append(str)
+                for s in score:
+                    d.append(s)
                 data_for_table.append(d)
         return data_for_table
 
@@ -115,11 +120,18 @@ class Analisys:
     #GUI will onlly suggest those which are in the list so do i need to check membership?
     def create_matchup_move_history_table(self, strategy1_name, strategy2_name):
         head = ["move", strategy1_name, strategy2_name]
+        data_for_table, data_for_pandas = self.create_data_for_matchup_move_history_table(strategy1_name, strategy2_name)
+        pd.set_option("display.max_rows", 10000)
+        matchup_move_history_frame = pd.DataFrame(data_for_pandas, columns=head[1:])
+        return(tabulate(data_for_table, headers=head, tablefmt="grid"), matchup_move_history_frame)
+        
+        
+    def create_data_for_matchup_move_history_table(self, strategy1_name, strategy2_name):
         data_for_table = []
         data_for_pandas = []
         data = self.__matchup_move_history_data
         if data == None:
-            return ("Data missing", None)
+            raise DataError("Data missing!")
         try:
             if strategy1_name == strategy2_name:
                 s1_moves = data[strategy1_name][strategy2_name][0]
@@ -131,9 +143,6 @@ class Analisys:
                 dft = [i, s1_moves[i], s2_moves[i]]
                 data_for_table.append(dft)
                 data_for_pandas.append(dft[1:])
-            pd.set_option("display.max_rows", 10000)
-            matchup_move_history_frame = pd.DataFrame(data_for_pandas, columns=head[1:])
-            return(tabulate(data_for_table, headers=head, tablefmt="grid"), matchup_move_history_frame)
+            return data_for_table, data_for_pandas    
         except KeyError:
-            return("strategy combination not available!", None)
-
+            raise DataError("strategy combination not available!")
