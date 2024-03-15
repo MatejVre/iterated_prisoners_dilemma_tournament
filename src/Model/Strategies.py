@@ -119,7 +119,7 @@ class Shubik(Strategy):
         
         if opponents_past_moves[-1] == 1:
             self.num_of_opp_defects += 1
-            self.upcoming_defects += self.num_of_opp_defects
+            self.upcoming_defects = self.num_of_opp_defects
         
         if self.upcoming_defects != 0:
             self.upcoming_defects -= 1
@@ -165,7 +165,7 @@ class Davis(Strategy):
     
     def choose_move(self, opponents_past_moves):
         #if opponent didn't defect yet
-        if not self.opponent_defected and len(opponents_past_moves) != 0:
+        if not self.opponent_defected and len(opponents_past_moves) != 0 and len(opponents_past_moves) < 10:
             #check last move
             self.opponent_defected = True if opponents_past_moves[-1] == 1 else False
 
@@ -267,7 +267,7 @@ class Adapter(Strategy):
         elif len(opponents_past_moves) % 10 == 0:
             opponents_defects = sum(opponents_past_moves[-10:])
             opponents_cooperations = 10 - opponents_defects
-            self.cooperation_chance += (opponents_defects - opponents_cooperations) * 0.2
+            self.cooperation_chance += (opponents_defects - opponents_cooperations) * 2
             if self.cooperation_chance > 100:
                 self.cooperation_chance == 100
             elif self.cooperation_chance < 0:

@@ -47,7 +47,7 @@ class Analisys:
 
     
     #https://www.geeksforgeeks.org/how-to-make-a-table-in-python/
-    def create_table_of_averages(self):
+    def create_table_of_averages(self, ordering):
         head = ["Strategy", "Average Score"]
         data_for_table = []
         if self.__strategy_score_data == None:
@@ -55,7 +55,7 @@ class Analisys:
         else:
             data_for_table = self.create_data_for_table_of_averages(self.__strategy_score_data)
         #sort based on the second element in the array
-        data_for_table = sorted(data_for_table, key=lambda x: x[1], reverse=True)
+        data_for_table = sorted(data_for_table, key=lambda x: x[ordering], reverse=True)
         averages_frame = pd.DataFrame(data_for_table, columns=head)
         averages_frame.sort_values(by=["Strategy"], ascending=False)
         return(tabulate(data_for_table, headers=head, tablefmt="grid"), averages_frame)

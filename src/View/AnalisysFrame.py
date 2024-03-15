@@ -7,14 +7,17 @@ class AnalisysFrame(customtkinter.CTkFrame):
         super().__init__(master)
 
         self.clipboard_dataframe = None
+
+        self.checkbox = customtkinter.CTkCheckBox(self, text="Order by scores")
+        self.checkbox.grid(row=0, column=0, padx=10, pady=10, sticky="w")
         
         #table of averages button
         self.display_table_of_averages_button = customtkinter.CTkButton(self, text="Table of averages", command= lambda : self.show_table_of_averages(master))
-        self.display_table_of_averages_button.grid(row=0, column=0, padx=10, pady=10, sticky="w")
+        self.display_table_of_averages_button.grid(row=0, column=1, padx=10, pady=10, sticky="w")
 
         #history table button
         self.display_history_table_button = customtkinter.CTkButton(self, text="History table", command= lambda : self.show_history_table(master))
-        self.display_history_table_button.grid(row=0, column=1, padx=10, pady=10, sticky="e")
+        self.display_history_table_button.grid(row=0, column=2, padx=10, pady=10, sticky="e")
 
         #strategy history table input box
         self.strategy_input_box = customtkinter.CTkEntry(self, placeholder_text="Strategy name")
@@ -42,7 +45,7 @@ class AnalisysFrame(customtkinter.CTkFrame):
 
     def show_table_of_averages(self, master):
         try:
-            result = master.controller.table_of_averages()
+            result = master.controller.table_of_averages(self.checkbox.get())
             table = result[0]
             self.clipboard_dataframe = result[1]
             master.update_main_textbox(table)

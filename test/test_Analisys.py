@@ -58,7 +58,7 @@ class Test_Analisys():
     def test_table_of_averages_error(self):
         analisys = Analisys()
         with pytest.raises(DataError) as excinfo:
-            analisys.create_table_of_averages()
+            analisys.create_table_of_averages(0)
         assert str(excinfo.value) == "Data missing!"
 
     def test_get_strategy_history(self):

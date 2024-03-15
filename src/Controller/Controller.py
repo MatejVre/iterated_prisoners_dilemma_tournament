@@ -47,8 +47,8 @@ class Controller():
         self.analisys.set_matchup_move_history_data(self.tournament.strategy_move_history)
 
     #call to other method, no need for testing
-    def table_of_averages(self):
-        return self.analisys.create_table_of_averages()
+    def table_of_averages(self, ordering):
+        return self.analisys.create_table_of_averages(ordering)
     
     #call to other method, no need for testing
     def history_table(self):
