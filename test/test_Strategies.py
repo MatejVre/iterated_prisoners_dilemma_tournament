@@ -149,17 +149,23 @@ class Test_Strategies():
     def test_Tullock(self):
         tullock = Tullock()
         alwaysDefect = AlwaysDefect()
+        alwaysCooperate = AlwaysCooperate()
         game = Game(tullock, alwaysDefect)
         moves = game.player_moves
         for i in range(20):
             game.play_round()
-        print(moves)
         #test first 11 are cooperations
         for x in range(11):
             assert moves[tullock][x] == 0
         #all after move 11 should be defections
         for n in range(14,20):
             assert moves[tullock][n] == 1
+        game = Game(tullock, alwaysCooperate)
+        moves = game.player_moves
+        for i in range(10000):
+            game.play_round()
+        count = moves[tullock][11:].count(0)
+        assert count > 8100 and count < 9900
 
 
     def test_Anklebreaker(self):

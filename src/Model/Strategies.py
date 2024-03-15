@@ -201,7 +201,7 @@ class Joss(Strategy):
                 
 
 #This rule cooperates on the first eleven
-#moves. I t then cooperates 10% less than the other player has cooperated on the
+#moves. It then cooperates 10% less than the other player has cooperated on the
 #preceding ten moves
 class Tullock(Strategy):
     
@@ -212,13 +212,14 @@ class Tullock(Strategy):
         else:
             last_ten_moves = opponents_past_moves[-10:]
             #number of 0's will be the amount of cooperations
-            opponents_cooperations = 10 - sum(last_ten_moves)
+            opponents_cooperations = last_ten_moves.count(0)
             my_cooperation_chance = opponents_cooperations - 1 #to lower it by 10 %
             #get a random integer between 1 and 10 including
             random_number = random.randint(1,10)
             #for example if opponent cooperated 4 out of 10 times, that's 40%. Minus 10% = 30%. So out of numbers 1 - 10, if
             #i pick 3 or less, i cooperate; otherwise, defect
-            if my_cooperation_chance in range(1, random_number + 1):
+            if random_number in range(1, (my_cooperation_chance + 1)):
+
                 return self.process_choice(0)
             else:
                 return self.process_choice(1)
@@ -291,6 +292,9 @@ class TitForTwoTats(Strategy):
             return self.process_choice(1)
         else:
             return self.process_choice(0)
+
+
+
 
 """
 class Graaskamp(Strategy):
