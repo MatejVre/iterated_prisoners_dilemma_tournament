@@ -106,3 +106,24 @@ class Test_Analisys():
         assert data[0][0][1:] == [0, 1]
         for row in data[0][1:]:
             assert row[1:] == [1, 1]
+
+    def test_create_data_for_matchup_matrix(self):
+        t = self.setup_method()
+        analisys = Analisys()
+        t.play_basic_tournament()
+        dic = t.strategy_matches
+        analisys.set_result_matrix(dic)
+        data, head = analisys.create_data_for_matchup_matrix()
+        for strat, scores in dic.items():
+            index = head.index(strat)
+            array_to_test = data[index - 1]
+            for s, score in scores.items():
+                assert score == array_to_test[head.index(s)]
+
+    def test_create_data_for_matchup_matrix_error(self):
+        analisys = Analisys()
+        with pytest.raises(DataError) as excinfo:
+            analisys.create_data_for_matchup_matrix()
+        assert str(excinfo.value) == "Data missing!"
+
+            

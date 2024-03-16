@@ -3,10 +3,11 @@ import pandas as pd
 from src.Model.Errors import DataError
 class Analisys:
 
-    def __init__(self, tournament_history_data=None, strategy_score_data=None, matchup_move_history_data=None):
+    def __init__(self, tournament_history_data=None, strategy_score_data=None, matchup_move_history_data=None, result_matrix=None):
         self.__tournament_history_data = tournament_history_data
         self.__strategy_score_data = strategy_score_data
         self.__matchup_move_history_data = matchup_move_history_data
+        self.__result_matrix = result_matrix
 
     def set_tournament_history_data(self, tournament_history_data):
         self.__tournament_history_data = tournament_history_data
@@ -16,6 +17,9 @@ class Analisys:
 
     def set_matchup_move_history_data(self, matchup_move_history_data):
         self.__matchup_move_history_data = matchup_move_history_data
+
+    def set_result_matrix(self, result_matrix):
+        self.__result_matrix = result_matrix
 
     #tested
     def create_history_table(self):
@@ -146,3 +150,25 @@ class Analisys:
             return data_for_table, data_for_pandas    
         except KeyError:
             raise DataError("strategy combination not available!")
+        
+    
+    def create_matchup_matrix(self):
+        data_for_table, head = self.create_data_for_matchup_matrix()
+        table_of_truth_frame = pd.DataFrame(data_for_table, columns=head)
+        return(tabulate(data_for_table, headers=head, tablefmt="grid"), table_of_truth_frame)
+
+    def create_data_for_matchup_matrix(self):
+        if self.__result_matrix == None:
+            raise DataError("Data missing!")
+        else:
+            head = ["s"] + [x for x in self.__result_matrix.keys()]
+            data_for_table = []
+            for key, value in self.__result_matrix.items():
+                d = [0] * len(self.__result_matrix.keys())
+                d.insert(0, key)
+                for strat, score in value.items():
+                    index = head.index(strat)
+                    d[index] = score
+                data_for_table.append(d)
+            return data_for_table, head
+        

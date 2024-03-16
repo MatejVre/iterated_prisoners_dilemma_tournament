@@ -45,6 +45,7 @@ class Controller():
         self.analisys.set_strategy_score_data(self.tournament.strategy_scores)
         self.analisys.set_tournament_history_data(self.tournament.tournament_history)
         self.analisys.set_matchup_move_history_data(self.tournament.strategy_move_history)
+        self.analisys.set_result_matrix(self.tournament.strategy_matches)
 
     #call to other method, no need for testing
     def table_of_averages(self, ordering):

@@ -27,6 +27,10 @@ class AnalisysFrame(customtkinter.CTkFrame):
         self.display_strategy_history_table_button = customtkinter.CTkButton(self, text="Strategy history table", command= lambda : self.show_strategy_history_table(master))
         self.display_strategy_history_table_button.grid(row=1, column=1, padx=10, pady=10, sticky="w")
 
+        #table of truth
+        self.table_of_truth_button = customtkinter.CTkButton(self, text="THE TABLE", command= lambda : self.show_the_table(master))
+        self.table_of_truth_button.grid(row=1, column=2, padx=10, pady=10, sticky="w")
+
         #strategy selector 1
         self.strategy_selection_menu1 = customtkinter.CTkOptionMenu(self, values=["None"], state="disabled")
         self.strategy_selection_menu1.grid(row=2, column=0, pady=10, padx=10)
@@ -38,6 +42,7 @@ class AnalisysFrame(customtkinter.CTkFrame):
         #show moves button
         self.show_moves_button = customtkinter.CTkButton(self, text="Show moves", command= lambda : self.show_strategy_moves(master))
         self.show_moves_button.grid(row=2, column=2, pady=10, padx=10)
+
 
 #Analisys functions return a tuple. The first element is the table stylized for the user, and the second one is the
 #Pandas dataframe with the same data as the first element (used for copying to clipboard)
@@ -88,6 +93,17 @@ class AnalisysFrame(customtkinter.CTkFrame):
             master.update_main_textbox(table)
             master.update_clipboard_button()
         except (DataError, KeyError) as e:
+            master.update_main_textbox(e)
+            master.update_clipboard_button()
+
+    def show_the_table(self, master):
+        try:
+            result = master.controller.analisys.create_matchup_matrix()
+            table = result[0]
+            self.clipboard_dataframe = result[1]
+            master.update_main_textbox(table)
+            master.update_clipboard_button()
+        except (DataError) as e:
             master.update_main_textbox(e)
             master.update_clipboard_button()
 

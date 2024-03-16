@@ -28,7 +28,7 @@ class App(customtkinter.CTk):
         self.grid_rowconfigure(2, weight=1)
 
         #represent the big textbox on the rightmost side of the program
-        self.main_textbox = customtkinter.CTkTextbox(self, state="disabled", font=customtkinter.CTkFont("Monaco", 14))
+        self.main_textbox = customtkinter.CTkTextbox(self, state="disabled", font=customtkinter.CTkFont("Monaco", 14), wrap="none")
         self.main_textbox.grid(row=0, column=1, rowspan=4, padx=10, pady=10, sticky="nesw")
 
         #represents the frame used for adding a singular strategy and setting its COI

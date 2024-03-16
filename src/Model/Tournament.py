@@ -14,6 +14,7 @@ class Tournament():
         self.tournament_history = {}
         self.strategy_move_history = {}
         self.strategy_scores = {}
+        self.strategy_matches = {}
 
 
     #this is quite a long method but it would make no sense to split it into
@@ -24,6 +25,7 @@ class Tournament():
             raise TournamentSizeError("Tournament has to have at least 2 strategies!")
         else:
             self.initialize_strategy_move_history()
+            self.initialize_strategy_matches()
             for strategy_pair in self.get_unique_strategy_pairs():
                 strat1 = strategy_pair[0]
                 strat2 = strategy_pair[1]
@@ -38,8 +40,9 @@ class Tournament():
                 self.add_strategy_moves(game, strat1, strat2)
                 self.add_strategy_score(strat1, score[0])
                 self.add_strategy_score(strat2, score[1])
+                self.strategy_matches[strat1.name()][strat2.name()] = score[0]
+                self.strategy_matches[strat2.name()][strat1.name()] = score[1]
                 game.clear()
-            #each strategy plays with a COPY of itself. Not itself directly because that would cause conflicts the world is not ready for
             for strategy in self.list_of_strategies:
                 strat1 = strategy
                 strat2 = copy.copy(strategy)
@@ -53,6 +56,7 @@ class Tournament():
                 self.tournament_history[(strat1.name(), strat2.name())] = score
                 self.add_strategy_moves(game, strat1, strat2)
                 self.add_strategy_score(strat1, score[0])
+                self.strategy_matches[strat1.name()][strat2.name()] = score[0]
                 game.clear()
 
                 
@@ -103,3 +107,8 @@ class Tournament():
         else:
             self.strategy_move_history[strategy1.name()][strategy2.name()] = moves[strategy1]
             self.strategy_move_history[strategy2.name()][strategy1.name()] = moves[strategy2]
+
+    def initialize_strategy_matches(self):
+        self.strategy_matches = {}
+        for strategy in self.list_of_strategies:
+            self.strategy_matches[strategy.name()] = dict()
