@@ -48,15 +48,15 @@ class App(customtkinter.CTk):
         self.analisys_frame.grid(row=3, column=0, padx=5, pady=10,)
 
         #this is used to create the clipboard button used to copy data tables in excel format
-        image = customtkinter.CTkImage(dark_image=Image.open(Path("src/static/clipboard.png")), size=(30, 30))
-        self.copy_button = customtkinter.CTkButton(self, text="", image=image, width=30, height=30, command= self.copy_to_clipboard, state="disabled")
-        self.copy_button.place(x=1125, y=20)
+        image = customtkinter.CTkImage(dark_image=Image.open(Path("src/static/clipboard.png")), size=(25, 25))
+        self.copy_button = customtkinter.CTkButton(self, text="", image=image, width=25, height=25, command= self.copy_to_clipboard, state="disabled")
+        self.copy_button.place(x=1150, y=10)
         
     #function that is used each time the text displayed in the main textbox is changed
     def update_main_textbox(self, value):
         self.main_textbox.configure(state="normal")
         self.main_textbox.delete("0.0", "end")
-        self.main_textbox.insert(customtkinter.END, value)
+        self.main_textbox.insert("1.50", "\n" + str(value))
         self.main_textbox.configure(state="disabled")
     
     #copies the text to the clipboard. Only callable if the text is displaying a table

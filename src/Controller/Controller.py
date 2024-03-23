@@ -9,25 +9,14 @@ from Model.Errors import TournamentSizeError
 #It is expressed in %
 class Controller():
     def __init__(self):
-        self.s1 = AlwaysDefect()
-        self.s2 = AlwaysCooperate()
-        self.s3 = TitForTat()
-        self.s4 = RandomChoice()
-        self.s5 = Grofman()
-        self.s6 = Shubik()
-        self.s7 = GrimTrigger()
-        self.s8 = Davis()
-        self.s9 = Joss()
-        self.s10 = Tullock()
-        self.s11 = Anklebreaker()
-        self.s12 = Adapter()
-        self.s13 = TitForTwoTats()
 
-        
         self.tournament = Tournament()
         self.analisys = Analisys()
 
-        self.basic_list_of_strategies = [self.s1, self.s2, self.s3, self.s4, self.s5, self.s6, self.s7, self.s8, self.s9, self.s10, self.s11, self.s12, self.s13]
+        self. basic_list_of_strategies = [AlwaysDefect(), AlwaysCooperate(), TitForTat(), RandomChoice(), Grofman(),
+                                        Shubik(), GrimTrigger(), Davis(), Joss(), Tullock(), Anklebreaker(), Adapter(),
+                                        TitForTwoTats()]
+
         
         self.strategy_creator = {}
         for strat in self.basic_list_of_strategies:
@@ -94,7 +83,6 @@ class Controller():
         return returned_name
     
 
-    #The two methods defined below are very similar but one has to throw an error if 
     def remove_strategy_from_tournament(self, name):
         for strategy in self.tournament.list_of_strategies:
             if strategy.name() == name:

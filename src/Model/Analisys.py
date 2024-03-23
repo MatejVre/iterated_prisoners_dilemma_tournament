@@ -161,14 +161,17 @@ class Analisys:
         if self.__result_matrix == None:
             raise DataError("Data missing!")
         else:
-            head = ["s"] + [x for x in self.__result_matrix.keys()]
+            head = ["Strategy"] + [x for x in self.__result_matrix.keys()] + ["Score"]
             data_for_table = []
             for key, value in self.__result_matrix.items():
-                d = [0] * len(self.__result_matrix.keys())
+                d = [0] * (len(self.__result_matrix.keys()) + 1)
                 d.insert(0, key)
+                running_sum = 0
                 for strat, score in value.items():
                     index = head.index(strat)
                     d[index] = score
+                    running_sum += score
+                d[-1] = running_sum // len(self.__result_matrix.keys())
                 data_for_table.append(d)
             return data_for_table, head
         

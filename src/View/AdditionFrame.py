@@ -10,7 +10,7 @@ class StrategyAddittionFrame(customtkinter.CTkFrame):
         self.strategy_dropdown_menu.grid(row=0, column=0, pady=10, padx=10)
  
         #COI input field
-        self.COI_input = customtkinter.CTkEntry(self, placeholder_text="COI")
+        self.COI_input = customtkinter.CTkEntry(self, placeholder_text="Chance of inverse")
         self.COI_input.grid(row=0, column=1, pady=10, padx=10)
 
         #add button

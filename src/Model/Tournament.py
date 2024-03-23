@@ -30,7 +30,7 @@ class Tournament():
                 strat1 = strategy_pair[0]
                 strat2 = strategy_pair[1]
                 game = Game(strat1, strat2)
-                print("Playing %s against %s" %(strat1.name(), strat2.name()))
+                #print("Playing %s against %s" %(strat1.name(), strat2.name()))
                 for i in range(self.iterations):
                     game.play_round()
                 strat1.reset()
@@ -47,7 +47,7 @@ class Tournament():
                 strat1 = strategy
                 strat2 = copy.copy(strategy)
                 game = Game(strat1, strat2)
-                print("Playing %s against %s" %(strat1.name(), strat2.name()))
+                #print("Playing %s against %s" %(strat1.name(), strat2.name()))
                 for _ in range(self.iterations):
                     game.play_round()
                 strat1.reset()

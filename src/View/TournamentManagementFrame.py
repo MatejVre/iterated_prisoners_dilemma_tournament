@@ -6,7 +6,7 @@ class TournamentManagementFrame(customtkinter.CTkFrame):
         super().__init__(master)
         
         #Set COI for fill with basic strategies
-        self.COI_for_fill = customtkinter.CTkEntry(self, placeholder_text="COI")
+        self.COI_for_fill = customtkinter.CTkEntry(self, placeholder_text="Chance of inverse")
         self.COI_for_fill.grid(row=0, column=0, padx=10, pady=10)
 
         #fill with basic strategies

@@ -28,7 +28,7 @@ class AnalisysFrame(customtkinter.CTkFrame):
         self.display_strategy_history_table_button.grid(row=1, column=1, padx=10, pady=10, sticky="w")
 
         #table of truth
-        self.table_of_truth_button = customtkinter.CTkButton(self, text="THE TABLE", command= lambda : self.show_the_table(master))
+        self.table_of_truth_button = customtkinter.CTkButton(self, text="Result matrix", command= lambda : self.show_the_table(master))
         self.table_of_truth_button.grid(row=1, column=2, padx=10, pady=10, sticky="w")
 
         #strategy selector 1
