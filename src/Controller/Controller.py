@@ -20,11 +20,11 @@ class Controller():
             Joss(), Tullock(), Anklebreaker(), Adapter(),
             TitForTwoTats()]
         
-        #Used to dinamically add strategies to the tournament using
+        #Used to add strategies to the tournament using
         #the PROTOTYPE design pattern.
         self.strategy_creator = {}
-        for strat in self.basic_list_of_strategies:
-            self.strategy_creator[strat.name()] = strat
+        for strategy in self.basic_list_of_strategies:
+            self.strategy_creator[strategy.name()] = strategy
 
 
     #Fills the tournament with the basic strategies.
@@ -126,3 +126,4 @@ class Controller():
                 self.tournament.set_iterations(int(input))
                 return True
         return False
+ 

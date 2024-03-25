@@ -17,8 +17,9 @@ class App(customtkinter.CTk):
         self.controller = Controller()
         self.title("Iterated Prisoners Dilemma Tournament")
         self.geometry("1200x800")
+        self.minsize(1200, 800)
         customtkinter.set_appearance_mode("dark")
-        self.resizable(False, False)
+        self.resizable(True, True)
 
         #configuring the grid to achieve a desired layout
         self.grid_columnconfigure(1, weight=5)
@@ -50,7 +51,7 @@ class App(customtkinter.CTk):
         #this is used to create the clipboard button used to copy data tables in excel format
         image = customtkinter.CTkImage(dark_image=Image.open(Path("src/static/clipboard.png")), size=(25, 25))
         self.copy_button = customtkinter.CTkButton(self, text="", image=image, width=25, height=25, command= self.copy_to_clipboard, state="disabled")
-        self.copy_button.place(x=1150, y=10)
+        self.copy_button.place(relx=0.955, y=10)
         
     #function that is used each time the text displayed in the main textbox is changed
     def update_main_textbox(self, value):
@@ -80,3 +81,7 @@ class App(customtkinter.CTk):
     def clear_clipboard_dataframe(self):
         self.analisys_frame.clipboard_dataframe = None
         self.update_clipboard_button()
+
+    #def clear_all(self):
+    #    self.strategy_addition_frame.clear()
+    #    self.tournament_management_frame.clear()

@@ -14,7 +14,7 @@ class TournamentManagementFrame(customtkinter.CTkFrame):
         self.fill_with_basic_strategies_button.grid(row=0, column=1, padx=10, pady=10)
 
         #input the number of rounds
-        self.tournament_rounds_input = customtkinter.CTkEntry(self, placeholder_text="number of rounds")
+        self.tournament_rounds_input = customtkinter.CTkEntry(self, placeholder_text="Number of rounds")
         self.tournament_rounds_input.grid(row=1, column = 0, padx=10, pady=10)
 
         #create tournament from filled strategies
@@ -68,3 +68,8 @@ class TournamentManagementFrame(customtkinter.CTkFrame):
         master.update_clipboard_button()
         master.analisys_frame.update_strategy_selectors(master)
         master.clear_clipboard_dataframe()
+        #master.clear_all()
+
+    #def clear(self):
+        #self.COI_for_fill.delete(0)
+        #self.tournament_rounds_input.delete(0)

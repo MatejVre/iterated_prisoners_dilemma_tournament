@@ -29,3 +29,6 @@ class StrategyAddittionFrame(customtkinter.CTkFrame):
         else:
             master.update_main_textbox("Chance of inverse must be an integer between 0 and 100")
             master.clear_clipboard_dataframe()
+    
+    def clear(self):
+        self.COI_input.delete(0)

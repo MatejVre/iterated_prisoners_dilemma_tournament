@@ -1,13 +1,13 @@
 """
 This is the game class which is used to run the game.
 Result matrix based off of:
-                Player 1
+                Player 2
                 Cooperate   Defect
  -----------+----------------------
- Player 2   |
- Cooperate  |    (3,3)      (5,0)
+ Player 1   |
+ Cooperate  |    (3,3)      (0,5)
             |
- Defect     |    (0,5)      (1,1)
+ Defect     |    (5,0)      (1,1)
  -----------------------------------
  The numbers for the lengths of statements are symbollic
  and will most likely change during the coding process
@@ -23,8 +23,8 @@ class Game:
         self.MINIMUM_PAYOFF = 1
         self.MEDIUM_PAYOFF = 3
         self.MAXIMUM_PAYOFF = 5
-        self.PAYOFF_MATRIX = [[(self.MEDIUM_PAYOFF, self.MEDIUM_PAYOFF), (self.MAXIMUM_PAYOFF, self.ZERO)],
-                     [(self.ZERO, self.MAXIMUM_PAYOFF), (self.MINIMUM_PAYOFF, self.MINIMUM_PAYOFF)]]
+        self.PAYOFF_MATRIX = [[(self.MEDIUM_PAYOFF, self.MEDIUM_PAYOFF), (self.ZERO, self.MAXIMUM_PAYOFF)],
+                              [(self.MAXIMUM_PAYOFF, self.ZERO), (self.MINIMUM_PAYOFF, self.MINIMUM_PAYOFF)]]
         #Stores the result of each round.
         self.game_history = []
 
@@ -39,10 +39,10 @@ class Game:
 
     #Plays the one-shot prisoner's dilemma.
     def play_round(self):
+        
         strategy1_move = self.strategy1.choose_move(self.player_moves[self.strategy2])
         strategy2_move = self.strategy2.choose_move(self.player_moves[self.strategy1])
-
-        result = self.PAYOFF_MATRIX[strategy2_move][strategy1_move]
+        result = self.PAYOFF_MATRIX[strategy1_move][strategy2_move]
 
         self.player_moves[self.strategy1].append(strategy1_move)
         self.player_moves[self.strategy2].append(strategy2_move)
