@@ -27,8 +27,8 @@ class AnalisysFrame(customtkinter.CTkFrame):
         self.display_strategy_history_table_button = customtkinter.CTkButton(self, text="Strategy history table", command= lambda : self.show_strategy_history_table(master))
         self.display_strategy_history_table_button.grid(row=1, column=1, padx=10, pady=10, sticky="w")
 
-        #table of truth
-        self.table_of_truth_button = customtkinter.CTkButton(self, text="Result matrix", command= lambda : self.show_the_table(master))
+        #result matrix button
+        self.table_of_truth_button = customtkinter.CTkButton(self, text="Result matrix", command= lambda : self.show_result_matrix(master))
         self.table_of_truth_button.grid(row=1, column=2, padx=10, pady=10, sticky="w")
 
         #strategy selector 1
@@ -70,7 +70,6 @@ class AnalisysFrame(customtkinter.CTkFrame):
             master.update_main_textbox(e)
             master.update_clipboard_button()
 
-
     def show_strategy_history_table(self, master):
         try:
             search = self.strategy_input_box.get()
@@ -87,7 +86,7 @@ class AnalisysFrame(customtkinter.CTkFrame):
         strategy1 = self.strategy_selection_menu1.get()
         strategy2 = self.strategy_selection_menu2.get()
         try:
-            result = master.controller.matchup_move_history_table(strategy1, strategy2)
+            result = master.controller.show_moves_table(strategy1, strategy2)
             table = result[0]
             self.clipboard_dataframe = result[1]
             master.update_main_textbox(table)
@@ -96,9 +95,9 @@ class AnalisysFrame(customtkinter.CTkFrame):
             master.update_main_textbox(e)
             master.update_clipboard_button()
 
-    def show_the_table(self, master):
+    def show_result_matrix(self, master):
         try:
-            result = master.controller.analisys.create_matchup_matrix()
+            result = master.controller.result_matrix()
             table = result[0]
             self.clipboard_dataframe = result[1]
             master.update_main_textbox(table)

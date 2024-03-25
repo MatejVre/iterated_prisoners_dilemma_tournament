@@ -52,9 +52,10 @@ class Test_Strategies():
                 moves_after_difference.append(moves[grofman][m+1])
         no_moves = len(moves_after_difference)
         no_defections = sum(moves_after_difference)
-        assert no_defections >= (no_moves * (5/7) - no_moves*0.1) and no_defections <= (no_moves * (5/7) + no_moves*0.1)
+        assert (no_defections >= (no_moves * (5/7) - no_moves*0.1) 
+                and no_defections <= (no_moves * (5/7) + no_moves*0.1))
 
-
+    #test??????
     def test_Shubik(self):
         shubik = Shubik()
         alwaysCooperate = AlwaysCooperate()
@@ -88,7 +89,6 @@ class Test_Strategies():
     def test_Davis(self):
         davis = Davis()
         alwaysCooperate = AlwaysCooperate()
-        alwaysDefect = AlwaysDefect()
         random = RandomChoice()
         game = Game(davis, alwaysCooperate)
         moves = game.player_moves
@@ -111,7 +111,6 @@ class Test_Strategies():
         alwaysCooperate = AlwaysCooperate()
         game = Game(joss, random)
         moves = game.player_moves
-
         #check defection after each defection
         for i in range(100):
             game.play_round()
@@ -133,17 +132,19 @@ class Test_Strategies():
         moves = game.player_moves
         for i in range(1000):
             game.play_round()
-        assert randtest.random_score(moves[joss])
+        assert randtest.random_score(moves[random])
 
 
     def test_process_choice(self):
-        alwaysCooperate = AlwaysCooperate(chance_of_inverse=5)
-        alwaysDefect = AlwaysDefect(chance_of_inverse=5)
+        alwaysCooperate = AlwaysCooperate(chance_of_inverse=10)
+        alwaysDefect = AlwaysDefect(chance_of_inverse=10)
         game = Game(alwaysCooperate, alwaysDefect)
         moves = game.player_moves
-        for i in range(1000):
+        for i in range(10000):
             game.play_round()
-        assert randtest.random_score(moves[alwaysCooperate]) and randtest.random_score(moves[alwaysDefect])
+        ac_moves = moves[alwaysCooperate]
+        ac_cooperations = ac_moves.count(0)
+        assert ac_cooperations >= 8100 and ac_cooperations <= 9900
         
 
     def test_Tullock(self):

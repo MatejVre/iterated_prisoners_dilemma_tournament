@@ -7,7 +7,7 @@ from src.Controller.Controller import *
 
 class Test_Controller_Functions():
 
-    #tests the add strategy and naming convention
+
     def test_add_strategy(self):
         c = Controller()
         s1 = c.add_strategy("TitForTat", 1)
@@ -18,6 +18,7 @@ class Test_Controller_Functions():
         assert s2.name() == "TitForTat-1%-1"
         assert s3.name() == "Joss"
 
+
     def test_name_strategy(self):
         c = Controller()
         c.add_strategy("TitForTat", 0)
@@ -26,13 +27,14 @@ class Test_Controller_Functions():
         assert  "TitForTat" in list
         assert "TitForTat-1" in list
 
+
     def test_remove_strategy_from_tournament(self):
         c = Controller()
         c.fill_with_basic_strategies(0)
-
         assert c.remove_strategy_from_tournament("TitForTat") == True
         assert c.remove_strategy_from_tournament("Random name that deffinitely does not work") == False
     
+
     def test_set_iterations(self):
         c = Controller()
         assert c.set_iterations("asdojfh") == False
@@ -40,6 +42,7 @@ class Test_Controller_Functions():
         assert c.set_iterations(1) == True
         assert c.set_iterations(10000) == True
         assert c.set_iterations(10001) == False
+
 
     def test_insert_all(self):
         c = Controller()

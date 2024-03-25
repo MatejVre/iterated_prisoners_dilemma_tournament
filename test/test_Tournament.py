@@ -5,6 +5,7 @@ from src.Controller.Controller import *
 
 class Test_Tournament():
 
+
     def test_add_strategy(self):
         shubik = Shubik()
         alwaysDefect = AlwaysDefect()

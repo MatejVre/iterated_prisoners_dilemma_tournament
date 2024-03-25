@@ -39,6 +39,7 @@ class TournamentManagementFrame(customtkinter.CTkFrame):
             master.custom_management_frame.update(master)
         else:
             master.update_main_textbox("Chance of inverse must be an integer between 0 and 100")
+            master.clear_clipboard_dataframe()
 
     def set_rounds(self, master):
         input = self.tournament_rounds_input.get()
@@ -48,6 +49,7 @@ class TournamentManagementFrame(customtkinter.CTkFrame):
         else:
             master.update_main_textbox("Number of rounds must be an integer between 1 or 10,000")
         master.custom_management_frame.update(master)
+        master.clear_clipboard_dataframe()
 
     def run_tournament(self, master):
         try:
@@ -56,6 +58,7 @@ class TournamentManagementFrame(customtkinter.CTkFrame):
             master.analisys_frame.update_strategy_selectors(master)
         except TournamentSizeError as e:
             master.update_main_textbox(e)
+        master.clear_clipboard_dataframe()
 
     def clear_all(self, master):
         master.controller.clear()
@@ -64,3 +67,4 @@ class TournamentManagementFrame(customtkinter.CTkFrame):
         master.update_main_textbox("")
         master.update_clipboard_button()
         master.analisys_frame.update_strategy_selectors(master)
+        master.clear_clipboard_dataframe()

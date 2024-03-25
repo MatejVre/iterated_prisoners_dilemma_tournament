@@ -7,6 +7,7 @@ from src.Model.Tournament import *
 
 class Test_Analisys():
 
+
     def setup_method(self):
         t = Tournament()
         tft = TitForTat()
@@ -17,15 +18,16 @@ class Test_Analisys():
         t.add_strategy(ad)
         return t
 
-    #test appropriate values, known outcomes used to test this function
-    def test_history_table(self):
+
+    def test_shape_data_for_history_table(self):
         t = self.setup_method()
         analisys = Analisys()
         games = t.tournament_history
         analisys.set_tournament_history_data(games)
-        data_to_test = analisys.create_data_for_history_table()
+        data_to_test = analisys.shape_data_for_history_table()
         for game, scores in games.values():
             assert [game[0], game[1], scores[0], scores[1]] in data_to_test
+
 
     #https://pytest-with-eric.com/introduction/pytest-assert-exception/
     def test_history_table_error(self):
@@ -34,7 +36,8 @@ class Test_Analisys():
             analisys.create_history_table()
         assert str(excinfo.value) == "Data missing!"
 
-    def test_table_of_averages(self):
+
+    def test_shape_data_for_table_of_averages(self):
         t = Tournament()
         tft = TitForTat()
         ac = AlwaysCooperate()
@@ -47,7 +50,7 @@ class Test_Analisys():
         strategy_scores = t.strategy_scores
         analisys = Analisys()
         analisys.set_strategy_score_data(strategy_scores)
-        data = analisys.create_data_for_table_of_averages(strategy_scores)
+        data = analisys.shape_data_for_table_of_averages(strategy_scores)
         assert len(data) == 3
         for row in data:
             assert row[0] in strats
@@ -55,11 +58,13 @@ class Test_Analisys():
             #ensures uniqueness
             strats.remove(row[0])
 
+
     def test_table_of_averages_error(self):
         analisys = Analisys()
         with pytest.raises(DataError) as excinfo:
             analisys.create_table_of_averages(0)
         assert str(excinfo.value) == "Data missing!"
+
 
     def test_get_strategy_history(self):
         t = self.setup_method()
@@ -74,7 +79,8 @@ class Test_Analisys():
                 assert value == [199, 204]
             else:
                 assert value == [600, 600]
-                
+
+
     def test_get_strategy_history_error(self):
         t = self.setup_method()
         analisys = Analisys()
@@ -87,43 +93,64 @@ class Test_Analisys():
         with pytest.raises(DataError) as excinfo:
             analisys.get_strategy_history("i deffinitely don't exist")
         assert str(excinfo.value) == "This strategy doesn't exist. Please check spelling!!!"
+    
 
-    def test_create_data_for_strategy_history_table(self):
+    def test_shape_data_for_strategy_history_table(self):
         t = self.setup_method()
         analisys = Analisys()
         t.play_basic_tournament()
-        analisys.set_matchup_move_history_data(t.strategy_move_history)
-        with pytest.raises(DataError) as excinfo:
-            analisys.create_data_for_matchup_move_history_table("TitForTat", "This strategy deffinitely doesn't exist")
-        assert str(excinfo.value) == "strategy combination not available!"
-        with pytest.raises(DataError) as excinfo:
-            analisys.create_data_for_matchup_move_history_table("This strategy deffinitely doesn't exist", "TitForTat")
-        assert str(excinfo.value) == "strategy combination not available!"
-        data = analisys.create_data_for_matchup_move_history_table("TitForTat", "TitForTat")
-        for row in data[0]:
-            assert row[1:] == [0, 0]
-        data = analisys.create_data_for_matchup_move_history_table("TitForTat", "AlwaysDefect")
-        assert data[0][0][1:] == [0, 1]
-        for row in data[0][1:]:
-            assert row[1:] == [1, 1]
+        hist = t.tournament_history
+        analisys.set_tournament_history_data(hist)
+        data = analisys.create_data_for_strategy_history_table("AlwaysDefect")
+        assert ["AlwaysDefect", "TitForTat", 204, 199] in data
+        assert ["AlwaysDefect", "AlwaysCooperate", 1000, 0] in data
+    
 
-    def test_create_data_for_matchup_matrix(self):
+    def test_shape_data_for_result_matrix(self):
         t = self.setup_method()
         analisys = Analisys()
         t.play_basic_tournament()
         dic = t.strategy_matches
         analisys.set_result_matrix(dic)
-        data, head = analisys.create_data_for_matchup_matrix()
+        data, head = analisys.shape_data_for_result_matrix()
         for strat, scores in dic.items():
             index = head.index(strat)
             array_to_test = data[index - 1]
             for s, score in scores.items():
                 assert score == array_to_test[head.index(s)]
 
-    def test_create_data_for_matchup_matrix_error(self):
+
+    def test_create_result_matrix_error(self):
         analisys = Analisys()
         with pytest.raises(DataError) as excinfo:
-            analisys.create_data_for_matchup_matrix()
+            analisys.create_result_matrix()
         assert str(excinfo.value) == "Data missing!"
 
-            
+
+    def test_shape_data_for_show_moves_table(self):
+        t = self.setup_method()
+        analisys = Analisys()
+        t.play_basic_tournament()
+        moves = t.strategy_move_history
+        analisys.set_matchup_move_history_data(moves)
+        #the [0] makes sure we take the data_for_table only
+        table = analisys.shape_data_for_show_moves_table("TitForTat", "TitForTat")[0]
+        for i in range(len(table)):
+            assert [i, 0, 0] == table[i]
+        table = analisys.shape_data_for_show_moves_table("AlwaysCooperate", "AlwaysDefect")[0]
+        for i in range(len(table)):
+            assert [i, 0, 1] == table[i]
+
+
+    def test_create_show_moves_table_error(self):
+        t = self.setup_method()
+        analisys = Analisys()
+        with pytest.raises(DataError) as excinfo:
+            analisys.create_show_moves_table("TitForTat", "TitForTat")
+        assert str(excinfo.value) == "Data missing!"
+        t.play_basic_tournament()
+        moves = t.strategy_move_history
+        analisys.set_matchup_move_history_data(moves)
+        with pytest.raises(DataError) as excinfo:
+            analisys.create_show_moves_table("No way i exist", "TitForTat")
+        assert str(excinfo.value) == "Strategy combination not available!"

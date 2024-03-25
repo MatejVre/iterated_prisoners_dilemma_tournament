@@ -5,7 +5,7 @@ from Controller.Controller import *
 from View.AdditionFrame import StrategyAddittionFrame
 from View.TournamentManagementFrame import TournamentManagementFrame
 from View.AnalisysFrame import AnalisysFrame
-from View.StrategyInformationFrame import StrategyInformationFrame
+from src.View.TournamentInformationFrame import TournamentInformationFrame
 from pathlib import Path
 
 
@@ -39,8 +39,8 @@ class App(customtkinter.CTk):
         self.tournament_management_frame = TournamentManagementFrame(self)
         self.tournament_management_frame.grid(row=1, column=0)
 
-        #represents the frame displaying the strategies that are currently in the tournament
-        self.custom_management_frame = StrategyInformationFrame(self)
+        #represents the frame displaying the strategies that are currently in the tournament and number of rounds
+        self.custom_management_frame = TournamentInformationFrame(self)
         self.custom_management_frame.grid(row=2, column=0, padx=5, pady=5, sticky="we")
         
         #represents the frame which holds everything to do with tables and data
@@ -58,7 +58,7 @@ class App(customtkinter.CTk):
         self.main_textbox.delete("0.0", "end")
         self.main_textbox.insert("1.50", "\n" + str(value))
         self.main_textbox.configure(state="disabled")
-    
+        self.update_clipboard_button()
     #copies the text to the clipboard. Only callable if the text is displaying a table
     def copy_to_clipboard(self):
         self.analisys_frame.clipboard_dataframe.to_clipboard()
@@ -76,3 +76,7 @@ class App(customtkinter.CTk):
     #check if chance of inverse is an integer between 0 and 100
     def COI_valid(self, COI):
         return str(COI).isnumeric() and int(COI) >= 0 and int(COI) <=100
+    
+    def clear_clipboard_dataframe(self):
+        self.analisys_frame.clipboard_dataframe = None
+        self.update_clipboard_button()
