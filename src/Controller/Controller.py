@@ -34,7 +34,7 @@ class Controller():
             self.add_strategy(strat.name(), COI)
 
     
-    #Plays the tournament.
+    #Plays the tournament by invoking the Tournament class.
     #This is called when the "Play tournament" button is pressed in the GUI.
     def play_tournament(self):
         self.tournament.reset()
