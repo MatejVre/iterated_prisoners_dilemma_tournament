@@ -68,8 +68,8 @@ class TournamentManagementFrame(customtkinter.CTkFrame):
         master.update_clipboard_button()
         master.analisys_frame.update_strategy_selectors(master)
         master.clear_clipboard_dataframe()
-        #master.clear_all()
+        master.clear_all()
 
-    #def clear(self):
-        #self.COI_for_fill.delete(0)
-        #self.tournament_rounds_input.delete(0)
+    def clear(self):
+        self.COI_for_fill.delete(0, "end")
+        self.tournament_rounds_input.delete(0, "end")

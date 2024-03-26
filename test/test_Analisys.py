@@ -92,7 +92,7 @@ class Test_Analisys():
         analisys.set_tournament_history_data(history)
         with pytest.raises(DataError) as excinfo:
             analisys.get_strategy_history("i deffinitely don't exist")
-        assert str(excinfo.value) == "This strategy doesn't exist. Please check spelling!!!"
+        assert str(excinfo.value) == "This strategy doesn't exist. Please check spelling!"
     
 
     def test_shape_data_for_strategy_history_table(self):

@@ -40,7 +40,7 @@ class Test_Tournament():
         tournament = Tournament()
         with pytest.raises(TournamentSizeError) as excinfo:
             tournament.play_basic_tournament()
-        assert str(excinfo.value) == "Tournament has to have at least 2 strategies!"
+        assert str(excinfo.value) == "Tournament has to contain at least 2 strategies!"
 
 
     def test_set_iterations(self):

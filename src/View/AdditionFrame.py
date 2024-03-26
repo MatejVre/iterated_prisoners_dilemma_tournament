@@ -31,4 +31,5 @@ class StrategyAddittionFrame(customtkinter.CTkFrame):
             master.clear_clipboard_dataframe()
     
     def clear(self):
-        self.COI_input.delete(0)
+        self.COI_input.delete(0, "end")
+        

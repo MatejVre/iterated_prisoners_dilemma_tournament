@@ -36,7 +36,7 @@ class Tournament():
     def play_basic_tournament(self):
         #plays all the different combinations of strategy pairs
         if len(self.list_of_strategies) < 2:
-            raise TournamentSizeError("Tournament has to have at least 2 strategies!")
+            raise TournamentSizeError("Tournament has to contain at least 2 strategies!")
         else:
             self.initialize_strategy_move_history()
             self.initialize_strategy_matches()

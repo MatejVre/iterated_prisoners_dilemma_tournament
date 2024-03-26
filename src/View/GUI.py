@@ -82,6 +82,7 @@ class App(customtkinter.CTk):
         self.analisys_frame.clipboard_dataframe = None
         self.update_clipboard_button()
 
-    #def clear_all(self):
-    #    self.strategy_addition_frame.clear()
-    #    self.tournament_management_frame.clear()
+    def clear_all(self):
+        self.strategy_addition_frame.clear()
+        self.tournament_management_frame.clear()
+        self.analisys_frame.clear()

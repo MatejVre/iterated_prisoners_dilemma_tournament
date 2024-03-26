@@ -117,3 +117,7 @@ class AnalisysFrame(customtkinter.CTkFrame):
         else:
             self.strategy_selection_menu2.configure(values=["None"], state="disabled")
             self.strategy_selection_menu1.configure(values=["None"], state="disabled")
+
+    
+    def clear(self):
+        self.strategy_input_box.delete(0, "end")
