@@ -110,7 +110,6 @@ class AnalisysFrame(customtkinter.CTkFrame):
     #strategies that are currently in the tournament.
     def update_strategy_selectors(self, master):
         strat_list = master.controller.tournament.strategy_move_history.keys()
-        print(strat_list)
         if strat_list != []:
             self.strategy_selection_menu1.configure(values=[x for x in strat_list], state="normal")
             self.strategy_selection_menu2.configure(values=[x for x in strat_list], state="normal")

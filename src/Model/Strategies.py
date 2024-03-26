@@ -1,11 +1,10 @@
 """
 Holds all strategies, defined as classes. The choose_move method has to have the opponents_past_moves
-parameter in order to not break everything. The parameter itself is unnecessary in some cases, however.
-Will see if i can add functions that retain state over multiple calls.
+parameter in order to work with the game class. The parameter itself is unnecessary in some cases, however.
 """
 import random
 
-#Tested
+
 class Strategy():
 
     def __init__(self, **kwargs):
@@ -49,19 +48,19 @@ class Strategy():
     def set_given_name(self, name):
         self.__given_name = name
 
-#Tested
+
 class AlwaysDefect(Strategy):
 
     def choose_move(self, opponents_past_moves):
         return self.process_choice(1)
     
-#Tested
+
 class AlwaysCooperate(Strategy):
 
     def choose_move(self, opponents_past_moves):
         return self.process_choice(0)
     
-#Tested
+
 class TitForTat(Strategy):
 
     def choose_move(self, opponents_past_moves):
@@ -70,16 +69,14 @@ class TitForTat(Strategy):
         else:
             return self.process_choice(opponents_past_moves[-1])
         
-#Cannot test     
+    
 class RandomChoice(Strategy):
 
     def choose_move(self, opponents_past_moves):
         return random.randint(0,1)
 
    
-#If the players did different things on the previous move,
-#this rule cooperates with probability 2/7. Otherwise this rule always cooperates
-#Tested
+
 class Grofman(Strategy):
 
     def __init__(self, **kwargs):
@@ -105,7 +102,7 @@ class Grofman(Strategy):
         self.own_past_move = None
 
 
-#Not tested completely
+
 class Shubik(Strategy):
 
     def __init__(self, **kwargs):
@@ -154,7 +151,7 @@ class GrimTrigger(Strategy):
         self.opponent_defected = False
 
 
-#This rule cooperates on the first ten moves, and then if there is a defection it defects until the end of the game.
+
 class Davis(Strategy):
 
     def __init__(self, **kwargs):
@@ -182,7 +179,7 @@ class Davis(Strategy):
         self.counter = 0
         self.opponent_defected = False
 
-#tested   
+
 class Joss(Strategy):
 
     def choose_move(self, opponents_past_moves):
@@ -200,9 +197,7 @@ class Joss(Strategy):
                     return self.process_choice(1)
                 
 
-#This rule cooperates on the first eleven
-#moves. It then cooperates 10% less than the other player has cooperated on the
-#preceding ten moves
+
 class Tullock(Strategy):
     
     def choose_move(self, opponents_past_moves):
@@ -241,22 +236,8 @@ class Anklebreaker(Strategy):
         
     def reset(self):
         self.counter = 0
-            
-
-class GoldenRatio(Strategy):
-    def __init__(self, **kwargs):
-        Strategy.__init__(self, **kwargs)
-        self.golden_ratio_decimals = "6180339887498948482045868343656381177203091798058"
-        self.golden_ratio_decimals_in_binary = ""
-
-        for char in self.golden_ratio_decimals:
-            self.golden_ratio_decimals_in_binary += (bin(int(char))[2:])
-        
-    def choose_move(self, opponents_past_moves):
-        return self.process_choice(int(self.golden_ratio_decimals_in_binary[len(opponents_past_moves) % len(self.golden_ratio_decimals_in_binary)]))
 
 
-#strategy i came up with before reading all the strategy definitions. Is quite simmilar to Tullock but i will include it regardless
 class Adapter(Strategy):
     def __init__(self, **kwargs):
         Strategy.__init__(self, **kwargs)
@@ -293,21 +274,3 @@ class TitForTwoTats(Strategy):
         else:
             return self.process_choice(0)
 
-
-
-
-"""
-class Graaskamp(Strategy):
-
-    def __init__(self, **kwargs):
-        Strategy.__init__(self, **kwargs)
-        self.counter = 0
-        self.random_opponent = False
-
-    def choose_move(self, opponents_past_moves):
-        if self.random_opponent:
-            return self.process_choice(1)
-        elif self.counter >= 49:
-            return self.process_choice(0)
-        elif
-""" 

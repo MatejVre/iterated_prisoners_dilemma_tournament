@@ -55,16 +55,25 @@ class Test_Strategies():
         assert (no_defections >= (no_moves * (5/7) - no_moves*0.1) 
                 and no_defections <= (no_moves * (5/7) + no_moves*0.1))
 
-    #test??????
+
     def test_Shubik(self):
         shubik = Shubik()
         alwaysCooperate = AlwaysCooperate()
+        alwaysDefect = AlwaysDefect()
         game = Game(shubik, alwaysCooperate)
         moves = game.player_moves
         for i in range(10):
             game.play_round()
         for move in moves[shubik]:
             assert move == 0
+        game = Game(shubik, alwaysDefect)
+        moves = game.player_moves
+        for i in range(1, 100):
+            game.play_round()
+            assert shubik.num_of_opp_defects == i-1
+        for move in moves[shubik][1:]:
+            assert move == 1
+        
 
     def test_GrimTrigger(self):
         grimTrigger = GrimTrigger()
@@ -85,7 +94,7 @@ class Test_Strategies():
         for m in game2.player_moves[grimTrigger][game2.player_moves[random].index(1) +1 :]:
             assert m == 1
 
-    #is random really the best choice?
+
     def test_Davis(self):
         davis = Davis()
         alwaysCooperate = AlwaysCooperate()

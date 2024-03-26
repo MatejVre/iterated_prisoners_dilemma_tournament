@@ -8,7 +8,6 @@ class Tournament():
 
 
     def __init__(self):
-        print("init")
         #Used to store the strategies playing in the tournament.
         self.list_of_strategies = []
         self.iterations = 200
